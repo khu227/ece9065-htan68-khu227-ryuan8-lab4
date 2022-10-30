@@ -10,5 +10,7 @@ router.post('/savefavouritelist', genres_handler.savefavouritelist);
 
 router.get('/searchfavouritelist/:list_name', genres_handler.searchfavouritelist);
 
+router.post('/deletefavouritelist', genres_handler.deletefavouritelist);
+
 
 module.exports = router;

@@ -65,3 +65,24 @@ exports.searchfavouritelist = (req, res) => {
 
     })
 }
+
+// 9. Delete a list of track IDs for a given schedule.
+//todo disable
+exports.deletefavouritelist = (req, res) => {
+//find list_id by list_name
+    const sql = `select list_id from favourite_list where list_name = ?`
+    database.query(sql,[req.body.list_name],(err,results) => {
+        if (err) return console.log(err.message)
+        if(results.length===0) return res.send({status:1,message:"The list name does not exists"})
+        let string = JSON.stringify(results)
+        let json = JSON.parse(string)
+        let List_id = json[0].list_id
+        //delete track_id by list_id
+        const sql1 = `update raw_tracks set list_id = null where list_id = ?`
+        database.query(sql1,[List_id],(err,results) => {
+            if (err) return console.log(err.message)
+            res.send(results)
+        })
+
+    })
+}
