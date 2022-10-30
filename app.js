@@ -2,6 +2,7 @@ const express = require('express')
 
 const app = express()
 
+
 const cors = require('cors')
 app.use(cors())
 
@@ -21,3 +22,10 @@ app.use('/', genresRouter);
 const favouritelistRouter = require('./router/favouritelist');
 app.use('/', favouritelistRouter);
 
+
+
+
+
+app.listen(3009, function () {
+  console.log('api server running at http://127.0.0.1:3009')
+})

@@ -46,3 +46,22 @@ exports.savefavouritelist = (req, res) => {
         })
     })
 }
+
+// 8. Get the list of track IDs for a given schedule.
+exports.searchfavouritelist = (req, res) => {
+    //find list_id by list_name
+    const sql = `select list_id from favourite_list where list_name = ?`
+    database.query(sql,[req.params.list_name],(err,results) => {
+        if (err) return console.log(err.message)
+        let string = JSON.stringify(results)
+        let json = JSON.parse(string)
+        let List_id = json[0].list_id
+        //find track_id by list_id
+        const sql1 = `select track_id from raw_tracks where list_id = ?`
+        database.query(sql1,[List_id],(err,results) => {
+            if (err) return console.log(err.message)
+            res.send(results)
+        })
+
+    })
+}
