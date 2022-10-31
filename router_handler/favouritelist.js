@@ -86,3 +86,13 @@ exports.deletefavouritelist = (req, res) => {
 
     })
 }
+//10.Get a list of list names, number of tracks that are saved in each list and the total play time of each list.
+exports.getfavouritelist = (req, res) => {
+const sql = `select list_name,count(favourite_list.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from favourite_list join raw_tracks on favourite_list.list_id=raw_tracks.list_id group by list_name`
+    database.query(sql,(err,results) => {
+        if (err) return console.log(err.message)
+        res.send(results)
+    })
+
+}
+// update raw_tracks set track_duration='00:'+track_duration
