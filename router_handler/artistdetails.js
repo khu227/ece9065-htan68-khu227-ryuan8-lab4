@@ -16,13 +16,26 @@ exports.getArtistdetails = (req, res) => {
     })
 }
 //item 5
-exports.getArtistname = (req,res) => {
-    const sql = `select artist_id from raw_artists where artist_name=?`
-    database.query(sql,[req.params.artist_name],(err,results) => {
+// exports.getArtistname = (req,res) => {
+//     const sql = `select artist_id from raw_artists where artist_name=?`
+//     database.query(sql,[req.params.artist_name],(err,results) => {
+//
+//         if (err) return console.log(err.message)
+//         res.send(results)
+//     })
+// }
+
+//Get all the matching artist IDs for a given search pattern matching the artist's name,results are sorted in ascending order
+exports.getArtistid = (req,res) => {
+    const sql = `select artist_id from raw_artists where artist_name like ? order by artist_id `
+    database.query(sql+req.query.sortby+' limit 10',["%"+req.params.artist_name+"%"],(err,results) => {
 
         if (err) return console.log(err.message)
         res.send(results)
     })
 }
+
+
+
 
 

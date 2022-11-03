@@ -66,12 +66,15 @@ exports.searchfavouritelist = (req, res) => {
     })
 }
 
-// 9. Delete a list of track IDs for a given schedule.
+// 9. Delete a list of track IDs for a given schedule
 //todo disable
 exports.deletefavouritelist = (req, res) => {
 //find list_id by list_name
+
     const sql = `select list_id from favourite_list where list_name = ?`
+
     database.query(sql,[req.body.list_name],(err,results) => {
+
         if (err) return console.log(err.message)
         if(results.length===0) return res.send({status:1,message:"The list name does not exists"})
         let string = JSON.stringify(results)
@@ -86,13 +89,31 @@ exports.deletefavouritelist = (req, res) => {
 
     })
 }
-//10.Get a list of list names, number of tracks that are saved in each list and the total play time of each list.
+//utf-8mb4
+//display artist, title, album and play time for each track in the list
+//10.Get a list of list names, display number of tracks,artist,title,album and play time that are saved in each list and the total play time of each list .
 exports.getfavouritelist = (req, res) => {
-const sql = `select list_name,count(favourite_list.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from favourite_list join raw_tracks on favourite_list.list_id=raw_tracks.list_id group by list_name`
+const sql = `select list_name,count(favourite_list.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from favourite_list join raw_tracks on favourite_list.list_id=raw_tracks.list_id group by list_name `
     database.query(sql,(err,results) => {
         if (err) return console.log(err.message)
         res.send(results)
     })
 
 }
-// update raw_tracks set track_duration='00:'+track_duration
+
+//get all favourite list and display artist, title, album and play time for each track in the list,sort all data by artist, track, album or length
+exports.getfavouritelistdetail = (req, res) => {
+    // const sql = `select list_name,track_id,track_title,artist_name,album_title,track_duration from favourite_list join raw_tracks on favourite_list.list_id=raw_tracks.list_id`
+    // database.query(sql,(err,results) => {
+    //     if (err) return console.log(err.message)
+    //     res.send(results)
+    // })
+    const sql = `select list_name,track_id,track_title,artist_name,album_title,track_duration from favourite_list join raw_tracks on favourite_list.list_id=raw_tracks.list_id order by `
+    database.query(sql+req.query.orderby,(err,results) => {
+        if (err) return console.log(err.message)
+        res.send(results)
+    })
+
+
+
+}
