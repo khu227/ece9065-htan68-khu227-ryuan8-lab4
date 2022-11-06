@@ -4,16 +4,16 @@ const router = express.Router();
 
 const genres_handler = require('../router_handler/favouritelist');
 
-router.post('/addfavouritelist', genres_handler.addfavouritelist);
+router.post('/favouritelists', genres_handler.addfavouritelist);
 
-router.post('/savefavouritelist', genres_handler.savefavouritelist);
+router.post('/favouritelistsavers', genres_handler.savefavouritelist);
 
-router.get('/searchfavouritelist/:list_name', genres_handler.searchfavouritelist);
+router.get('/favouritelistbynames/:list_name', genres_handler.searchfavouritelist);
 
-router.post('/deletefavouritelist', genres_handler.deletefavouritelist);
+router.post('/favoritelistdeletions', genres_handler.deletefavouritelist);
 
-router.get('/getfavouritelist', genres_handler.getfavouritelist);
+router.get('/favouritelists', genres_handler.getfavouritelist);
 
-router.get('/getfavouritelistdetail', genres_handler.getfavouritelistdetail);
+router.get('/favouritelistdetails', genres_handler.getfavouritelistdetail);
 
 module.exports = router;

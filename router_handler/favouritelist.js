@@ -6,7 +6,7 @@ exports.addfavouritelist = (req, res) => {
 
         //to-do err message
         if (err) return console.log(err.message)
-        if(results.length>0) return res.send({status:1,message:"The list name already exists'"})
+        if(results.length>0) return res.send({status:1,message:"The list name already exists"})
 
         const sql =`insert into favourite_list set ?`
         database.query(sql,[req.body],(err,results) =>{
@@ -29,9 +29,6 @@ exports.savefavouritelist = (req, res) => {
         const sql1 = `select list_id from favourite_list where list_name = ?`
         database.query(sql1,[req.body.list_name],(err,results)=>{
             if (err) return console.log(err.message)
-            // let list_id =Number(results.list_id)
-            // const result = JSON.parse(results);
-            // console.log(result)
             let string = JSON.stringify(results)
             let json = JSON.parse(string)
             let List_id = json[0].list_id
@@ -40,6 +37,8 @@ exports.savefavouritelist = (req, res) => {
             sql2 = 'update raw_tracks set list_id=? where track_id=?'
             database.query(sql2,[List_id,req.body.track_id],(err,results)=>{
                 if (err) return console.log(err.message)
+                // if the track_id does not exist, return error
+                if(results.affectedRows===0) return res.send({status:1,message:"The track_id does not exists"})
                 if (results.affectedRows === 1) res.send({ status: 1, message: 'The track_id was added successfully' })
             })
 
@@ -53,6 +52,8 @@ exports.searchfavouritelist = (req, res) => {
     const sql = `select list_id from favourite_list where list_name = ?`
     database.query(sql,[req.params.list_name],(err,results) => {
         if (err) return console.log(err.message)
+        //if the list does not exist, return the message
+        if(results.length===0) return res.send({status:1,message:"The list name does not exists"})
         let string = JSON.stringify(results)
         let json = JSON.parse(string)
         let List_id = json[0].list_id
@@ -60,6 +61,8 @@ exports.searchfavouritelist = (req, res) => {
         const sql1 = `select track_id from raw_tracks where list_id = ?`
         database.query(sql1,[List_id],(err,results) => {
             if (err) return console.log(err.message)
+            if(results.length===0) return res.send({status:1,message:"The list name does not exists"})
+            //if  list_name does not exist, return error
             res.send(results)
         })
 
@@ -74,17 +77,24 @@ exports.deletefavouritelist = (req, res) => {
     const sql = `select list_id from favourite_list where list_name = ?`
 
     database.query(sql,[req.body.list_name],(err,results) => {
-
         if (err) return console.log(err.message)
+        //if the list does not exist, return the message
         if(results.length===0) return res.send({status:1,message:"The list name does not exists"})
         let string = JSON.stringify(results)
         let json = JSON.parse(string)
         let List_id = json[0].list_id
+        //when the list_name exists, but the list_id in raw_tracks does not exist, return error
+        const sql= `select list_id from raw_tracks where list_id = ?`
+        database.query(sql,[List_id],(err,results) => {
+            if(results.length===0) return res.send({status:1,message:"The list name does not exists"})
+        })
+
         //delete track_id by list_id
         const sql1 = `update raw_tracks set list_id = null where list_id = ?`
         database.query(sql1,[List_id],(err,results) => {
             if (err) return console.log(err.message)
-            res.send(results)
+            //if delete successfully, return message
+            if (results.affectedRows === 1) res.send({ status: 1, message: 'The tracks were deleted successfully' })
         })
 
     })
@@ -113,7 +123,6 @@ exports.getfavouritelistdetail = (req, res) => {
         if (err) return console.log(err.message)
         res.send(results)
     })
-
 
 
 }

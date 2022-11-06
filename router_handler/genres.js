@@ -6,10 +6,6 @@ exports.getGenres = (req, res) => {
 
         //to-do err message
         if (err) return console.log(err.message)
-        res.send({
-            status:0,
-            message:'',
-            data: results,
-        })
+        res.send(results)
     })
 }

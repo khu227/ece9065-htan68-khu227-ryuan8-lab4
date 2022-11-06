@@ -6,7 +6,9 @@ const database = mysql.createPool({
   user: 'root',
   password: '88888888',
   database: 'lab3_music',
-  multipleStatements: true
+  multipleStatements: true,
+  //Character encoding format
+    charset: 'utf8mb4'
 })
 
 // 向外共享 db 数据库连接对象

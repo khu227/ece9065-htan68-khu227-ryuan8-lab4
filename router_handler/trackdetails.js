@@ -6,25 +6,28 @@ exports.getTrackdetails = (req, res) => {
 
         //to-do err message
         if (err) return console.log(err.message)
-        res.send({
-            status:0,
-            message:'',
-            data: results,
-        })
+        res.send(results)
     })
 }
 //item 4
 exports.getTrackid = (req,res) => {
-    //to-do %{}%
-    const  sql = `select track_id from raw_tracks where album_title like '%?%'`
-    database.query(sql,[req.params.album_title],(err,results) => {
+    // const  sql = `select track_id from raw_tracks where album_title like '%?%'`
+    // Get the first n number of matching track IDs for a given search pattern matching the track title or album title.
+    const sql = `select track_id from raw_tracks where album_title like ? or track_title like ? `
+    database.query(sql+' limit'+req.query.limit,["%"+req.params.album_title+"%","%"+req.params.track_title+"%"],(err,results) => {
+        if (err) return console.log(err.message)
+        res.send(results)
+    })
+}
+
+//front-end2
+//Ability to search the music data by track name, artist name or album name and display results
+exports.getMusicData = (req, res) => {
+    //sort all data by artist, track, album or length
+    const sql = `select album_id, album_title, artist_id, artist_name, track_date_created, track_number, track_title from raw_tracks where track_title like ? or artist_name like ? or album_title like ? order by `
+    database.query(sql+req.query.orderby+'  limit 5',["%"+req.params.track_title+"%","%"+req.params.artist_name+"%","%"+req.params.album_title+"%"],(err,results) => {
         //to-do err message
         if (err) return console.log(err.message)
-        res.send({
-            status:0,
-            message:'',
-            data: results,
-        })
+        res.send(results)
     })
-
 }
