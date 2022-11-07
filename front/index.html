@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lab3</title>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
+<body>
+
+<div class="search-bar01">
+    Get the artist details given an artist ID<input type="text" id="artistid-input" >
+        <button type="button" id="artist_id-search-btn">Click to search by artist_id</button>
+        <div id="artist_id-search-result"></div>
+</div>
+
+<div class="search-bar02">
+    Get details for a given track ID<input type="text" id="track_id-input" >
+        <button type="button" id="Trackdetails-search-btn">Click to search by track_id</button>
+        <div id="Trackdetails-search-result"></div>
+</div>
+
+<div class="search-bar03">
+    <!--    const sql = `select track_id from raw_tracks where album_title like ? or track_title like ? limit 10`-->
+    Get track id by given a track title or album title<input type="text" id="track_title-input" >
+        <button type="button" id="track_title-search-btn">Click to search track_id by album_title or track_title </button>
+<!--        create radio to select the limit of the result-->
+         limit：<input type="radio" name="limit" value="5" checked> 5
+                <input type="radio" name="limit" value="10"> 10
+                <input type="radio" name="limit" value="20"> 20
+        <div id="track_title-search-result"></div>
+</div>
+
+
+<div class="search-bar04">
+    Get artist IDs for a given search pattern matching the artist's name.<input type="text" id="artistname-input" >
+        <button type="button" id="artistname-search-btn">Click to search by artist_name</button>
+        sortby :<input type="radio"  name="sortbyArtistid" value="asc" checked="yes">artist_id ASC
+        <input type="radio"  name="sortbyArtistid" value="desc">artist_id DESC
+        <div id="artistname-search-result"></div>
+</div>
+<!--Get all available genre names, IDs and parent IDs.-->
+<div class="search-bar05">
+    Get all available genre names, IDs and parent IDs.
+        <button type="button" id="genre-search-btn">Click to get all genres</button>
+<!--    Use pagination to present results in pages of 10 results each.-->
+        <div id="genre-search-result"></div>
+</div>
+
+
+<div class="create-bar">
+    Create a new list to save a list of tracks with a given list name
+        <input type="text" id="createList-input" >
+        <button type="button" id="createList-btn">Click to create a favourite list</button>
+        <div id="createList-result"></div>
+</div>
+
+<div class="save-bar">
+    Save a list of track IDs to a given list name.
+        listname:<input type="text" content="listname" id="saveList-input" >
+        trackid:<input type="text" content="trackid" id="savetrack_id-input">
+        <button type="button" id="saveList-btn">Click to save list</button>
+        <div id="saveList-result"></div>
+</div>
+
+<div class="searchList-bar">
+    Get the list of track IDs for a given schedule.
+    listname:<input type="text" content="listname" id="searchList-input" >
+    <button type="button" id="searchList-btn">Click to search list</button>
+    <div id="searchList-result"></div>
+</div>
+
+<div class="deleteList-bar">
+    Delete a list of tracks with a given name.
+    listname:<input type="text" content="listname" id="deleteList-input" >
+    <button type="button" id="deleteList-btn">Click to delete list</button>
+    <div id="deleteList-result"></div>
+</div>
+
+<div>
+    <button type="button" id="getList-btn">Click to get list information</button>
+    <div id="getList-result"></div>
+</div>
+<div>
+    <button type="button" id="getListdetail-btn">Click to get list detail</button>
+    <div id="getListdetail-result"></div>
+    orderby:<input type="radio"  name="listOrderby" value="artist_name" checked="yes">artist_name
+    <input type="radio"  name="listOrderby" value="track_id">track_id
+    <input type="radio"  name="listOrderby" value="album_title">album_title
+    <input type="radio"  name="listOrderby" value="track_duration">track_duration
+
+</div>
+
+<div>
+      <!--    musicdata-->
+    <input type="text" id="musicdata-input" >
+    <button type="button" id="getMusicdata-btn">Click to get music data</button>
+
+    orderby:<input type="radio"  name="musicdataOrderby" value="artist_name" checked="yes">artist_name
+    <input type="radio"  name="musicdataOrderby" value="track_id">track_id
+    <input type="radio"  name="musicdataOrderby" value="album_title">album_title
+    <input type="radio"  name="musicdataOrderby" value="track_duration">track_duration
+    <div id="getMusicdata-result"></div>
+
+</div>
+
+
+
+
+<script src="static/app.js" ></script>
+</body>
+</html>
