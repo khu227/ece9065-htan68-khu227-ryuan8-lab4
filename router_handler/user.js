@@ -3,7 +3,7 @@ const database = require('../database/index')
 const bcrypt = require('bcryptjs')
 
 const jwt = require('jsonwebtoken')
-const config = require('../../../../ece9065-htan68-khu227-ryuan8-lab4/config')
+const config = require('../config')
 
 // register an account with an email, a password and a name.
 exports.register = (req, res) => {
