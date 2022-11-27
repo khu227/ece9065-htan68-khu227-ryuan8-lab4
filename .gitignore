@@ -1,2 +1,4 @@
 .DS_Store
 node_modules/
+front_end/node_modules/
+.idea
