@@ -1,0 +1,6 @@
+.home {
+    padding-top: 100px;
+    background-image: url('../assets/home_background.jpg');
+    background-position: center center;
+    height: 100%;
+}
