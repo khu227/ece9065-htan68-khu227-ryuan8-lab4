@@ -3,7 +3,7 @@ const database = require('../database/index')
 const bcrypt = require('bcryptjs')
 
 const jwt = require('jsonwebtoken')
-const config = require('../../../../ece9065-htan68-khu227-ryuan8-lab4/config')
+const config = require('../config')
 
 function mail(to,title,content,callback) {
     const nodemailer = require('nodemailer'); //引入依赖
@@ -73,17 +73,19 @@ exports.login = (req, res) => {
     const sql = `select * from user where Email=? `
     database.query(sql, [userinfo.Email], (err, results) => {
         if (err) return console.log(err.message)
-        if (results.length === 0) return res.send({ status: 1, message: 'The email does not exist' })
+        if (results.length === 0) return res.send({ status: 401, message: 'The email does not exist' })
         // Compare the password
         const isMatch = bcrypt.compareSync(userinfo.password, results[0].password)
-        if (!isMatch) return res.send({ status: 1, message: 'The password is incorrect' })
-        // Generate a token
-        const token = jwt.sign({ id: results[0].id }, config.jwtSecret, { expiresIn: '1h' })
+        if (!isMatch) return res.send({ status: 401, message: 'The password is incorrect' })
+        // generate a token in the server
+        const user = { ...results[0], password: ''}
+        const tokenStr = jwt.sign(user, config.jwtSecretKey, { expiresIn: config.expiresIn })
         //check user is activated or not
         if (results[0].is_active === 0) {
-            return res.send({ status: 1, message: 'Please contact the site administrator' })
+            return res.send({ status: 401, message: 'Please contact the site administrator' })
         }else{
-            res.send({ status: 0, message: 'Logged in successfully', token: 'Bearer ' + token })
+            res.send({ status: 100, message: 'Logged in successfully', token: 'Bearer ' + tokenStr })
         }
     })
 }
+
