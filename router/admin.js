@@ -8,7 +8,7 @@ router.get('/userNameLists', admin_handler.getUserName);
 
 router.post('/adminGrant', admin_handler.getAdminGrant);
 
-// router.get('/adminDeactivation', admin_handler.deactivateUser);
+router.post('/adminDeactivation', admin_handler.deactivateUser);
 
 
 module.exports = router;
