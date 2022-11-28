@@ -1,14 +1,25 @@
 const express = require('express')
 
 const app = express()
-const expressJWT = require('express-jwt')
+// const expressJWT = require('express-jwt')
+// const config = require('./config')
 const jwt = require('jsonwebtoken')
 
 const { auth } = require('express-openid-connect');
 const { requiresAuth } = require('express-openid-connect');
 app.set('trust proxy', true)
 
-const config = {
+const expressJWT = require('express-jwt')
+const config = require('./config')
+
+// expressJWT use for analysis token
+//unless: api/open is not need to analysis token
+app.use(expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api\/open/] }))
+
+
+
+
+const configa = {
   authRequired: false,
   auth0Logout: true,
   secret: 'b972e0d1a850461887ec3fbb74784e9a555e5072c57772d1fe9e66e97b5d2d0e',
@@ -40,11 +51,11 @@ const favouritelistRouter = require('./router/favouritelist');
 app.use('/', favouritelistRouter);
 
 const userRouter = require('./router/user');
-app.use('/', userRouter);
+app.use('/api/open', userRouter);
 
+const adminRouter = require('./router/admin');
+app.use('/api/admin', adminRouter);
 
-// const adminRouter = require('./router/admin');
-// app.use('/', adminRouter);
 
 app.listen(3009, function () {
   console.log('api server running at http://127.0.0.1:3009')
