@@ -67,7 +67,7 @@ exports.register = (req, res) => {
 exports.login = (req, res) => {
     const userinfo = req.body
     if (!userinfo.Email || !userinfo.password) {
-        return res.send({ status: 1, message: 'Email and password are required' })
+        return res.send({ status: 401, message: 'Email and password are required' })
     }
     // Check if the email already exists
     const sql = `select * from user where Email=? `
@@ -84,8 +84,11 @@ exports.login = (req, res) => {
         if (results[0].is_active === 0) {
             return res.send({ status: 401, message: 'Please contact the site administrator' })
         }else{
-            res.send({ status: 100, message: 'Logged in successfully', token: 'Bearer ' + tokenStr })
+            //return token and user infrmation
+            res.send({ status: 200, message: 'Login successfully', token: 'Bearer ' + tokenStr, user })
+            // res.send({ status: 100, message: 'Logged in successfully', token: 'Bearer ' + tokenStr })
         }
+
     })
 }
 

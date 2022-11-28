@@ -43,6 +43,8 @@ const userRouter = require('./router/user');
 app.use('/', userRouter);
 
 
+// const adminRouter = require('./router/admin');
+// app.use('/', adminRouter);
 
 app.listen(3009, function () {
   console.log('api server running at http://127.0.0.1:3009')
