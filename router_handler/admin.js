@@ -48,6 +48,22 @@ exports.deactivateUser = (req, res) => {
     })
 }
 
+exports.reactivateUser = (req, res) => {
+    //Determine whether the currently logged-on user is an administrator
+    const sql = `select * from user where id = ? and is_admin =1`
+    database.query(sql, req.user.id, (err, results) => {
+        if (err) return console.log(err.message)
+        if (results.length !== 1) return res.send('You are not an administrator')
+        //Reactivate one or more users
+        const sql = `update user set is_active = 1 where name = ?`
+        database.query(sql,req.body.name, (err, results) => {
+            if (err) return console.log(err.message)
+            if (results.affectedRows === 0) return res.send('The user does not exist')
+            res.send({status:400,message:'The user was reactivated successfully'})
+        })
+    })
+}
+
 
 
 

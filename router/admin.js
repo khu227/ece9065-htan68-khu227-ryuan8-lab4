@@ -10,5 +10,6 @@ router.post('/adminGrant', admin_handler.getAdminGrant);
 
 router.post('/adminDeactivation', admin_handler.deactivateUser);
 
+router.post('/adminReactivation', admin_handler.reactivateUser);
 
 module.exports = router;
