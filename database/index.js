@@ -2,7 +2,7 @@ const mysql = require('mysql')
 
 // 创建数据库连接对象
 const database = mysql.createPool({
-  host: '127.0.0.1',
+  host: 'lab3-music.c3yxv5zktgur.us-east-1.rds.amazonaws.com',
   user: 'root',
   password: '00000000',
   database: 'lab4',
