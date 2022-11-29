@@ -4,6 +4,7 @@ import {
 import Home from '../pages/home.js';
 import SignIn from '../pages/signin.js';
 import SignUp from '../pages/signup.js';
+import TrackSearch from '../pages/trackSearch.js';
 
 const router = createBrowserRouter([
     {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/search',
-        element: <h1>search</h1>
+        element: <TrackSearch/>
     }
 ]);
 

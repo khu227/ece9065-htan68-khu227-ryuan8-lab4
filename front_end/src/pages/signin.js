@@ -1,6 +1,6 @@
 // reference: https://github.com/mui/material-ui/tree/v5.10.14/docs/data/material/getting-started/templates/sign-in
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,6 +14,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import validator from 'validator';
+import { useDispatch, useSelector } from "react-redux";
+import { login } from '../actions/auth';
 
 function Copyright(props) {
   return (
@@ -28,6 +31,21 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
+  const dispatch = useDispatch();
+
+  const [emailErr, setEmailErr] = useState('');
+  const [passErr, setPassErr] = useState('');
+
+  const handleEmailChange = e => {
+    const email = e.currentTarget.value;
+    if (validator.isEmail(email)) {
+      setEmailErr('');
+    }
+    else {
+      setEmailErr('invalid email');
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -35,6 +53,16 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    const email = data.get('email');
+    const password = data.get('password');
+    if (!email) {
+      setEmailErr('empty!');
+    }
+    if (!password) {
+      setPassErr('empty!');
+    }
+    dispatch(login(email, password));
+    // login(email, password)();
   };
 
   return (
@@ -65,6 +93,9 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              error={emailErr}
+              helperText={emailErr}
+              onChange={handleEmailChange}
             />
             <TextField
               margin="normal"
@@ -75,6 +106,8 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              error={passErr}
+              helperText={passErr}
             />
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -85,6 +118,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onSubmit={handleSubmit}
             >
               Sign In
             </Button>
@@ -106,4 +140,4 @@ export default function SignIn() {
       </Container>
     </ThemeProvider>
   );
-}
+};

@@ -50,7 +50,7 @@ export default function SignUp() {
 
   const handleEmailChange = e => {
     const email = e.currentTarget.value;
-    console.log(email);
+    // console.log(email);
     if (validator.isEmail(email)) {
       setEmailErr('');
     }
@@ -64,15 +64,15 @@ export default function SignUp() {
     if (!pass) {
       setPassErr('empty!')
     }
-    console.log(pass);
+    // console.log(pass);
     setPass(pass);
   };
 
   const handleConfirmPassChange = e => {
     const confirmPass = e.currentTarget.value;
-    console.log(confirmPass);
+    // console.log(confirmPass);
     if (!confirmPass) {
-      setPassErr('empty!');
+      setConfirmPassErr('empty!');
     }
     if (confirmPass == pass) {
       setConfirmPassErr('');

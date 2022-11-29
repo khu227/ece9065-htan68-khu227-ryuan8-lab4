@@ -17,7 +17,7 @@ import {
     NavLink
 } from 'react-router-dom';
 
-const pages = ['Track Searching', 'All Play-lists', 'Administrator'];
+const pages = ['Track Searching', 'All Play-lists'];
 const settings = ['Alter Password', 'Logout'];
 const route = {
     'Track Searching': '/search',
@@ -27,9 +27,13 @@ const route = {
 
 // reference: https://mui.com/material-ui/react-app-bar/
 
-function Header() {
+function Header(props) {
+    const auth = props.auth;
+    const {isAdmin, isLoggedIn} = auth;
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+    isAdmin && pages.push('Administrator');
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
