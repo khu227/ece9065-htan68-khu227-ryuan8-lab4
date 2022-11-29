@@ -32,7 +32,7 @@ function mail(to,title,content,callback) {
 exports.register = (req, res) => {
     const userinfo = req.body
     if (!userinfo.Email || !userinfo.password || !userinfo.name) {
-        return res.send({ status: 1, message: 'Email, password and name are required' })
+        return res.send({ status: 401, message: 'Email, password and name are required' })
     }
     //email format check
     const emailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
@@ -56,7 +56,7 @@ exports.register = (req, res) => {
                 const sql = `insert into user (Email, password, name) values (?, ?, ?)`
                 database.query(sql, [userinfo.Email, userinfo.password, userinfo.name], (err, results) => {
                     if (err) return console.log(err.message)
-                    res.send({ status: 100, message: 'The email has been sent, please check it' })
+                    res.send({ status: 200, message: 'The email has been sent, please check it' })
                 })
             })
         } )
