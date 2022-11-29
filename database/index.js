@@ -4,8 +4,8 @@ const mysql = require('mysql')
 const database = mysql.createPool({
   host: '127.0.0.1',
   user: 'root',
-  password: '88888888',
-  database: 'lab3_music',
+  password: '00000000',
+  database: 'lab4',
   multipleStatements: true,
   //Character encoding format
     charset: 'utf8mb4'

@@ -31,3 +31,39 @@ exports.getMusicData = (req, res) => {
         res.send(results)
     })
 }
+
+
+
+// lab4 3:b+c+e(part)
+exports.getTrackByCombi = (req,res) =>{
+    const tracktitle = req.query.track_title.replace(' ','')
+    const artistname = req.query.artist_name.replace(' ','')
+    const genre = req.query.track_genres.replace(' ','')
+    let sql = '';
+    if(artistname.length===0 &&genre.length===0&&tracktitle.length>0){
+         sql = `select * from raw_tracks where track_title like '%${tracktitle}%'`
+    }
+    else if(tracktitle.length===0 &&genre.length===0&&artistname.length>0){
+         sql = `select * from raw_tracks where  artist_name like '%${artistname}%'`
+    }
+    else if(artistname.length===0 &&tracktitle.length===0&&genre.length>0){
+         sql = `select * from raw_tracks where track_genres like '%${genre}%'`
+    }
+    else if(artistname.length>0 &&tracktitle.length>0&&genre.length===0){
+         sql = `select * from raw_tracks where  artist_name like '%${artistname}%' AND track_title like '%${tracktitle}%'`
+    }
+    else if(genre.length>0 &&tracktitle.length>0&&artistname.length===0){
+         sql = `select * from raw_tracks where  track_genres like '%${genre}%' AND track_title like '%${tracktitle}%'`
+    }
+    else if(genre.length>0 &&artistname.length>0&&tracktitle.length===0){
+         sql = `select * from raw_tracks where  track_genres like '%${genre}%' AND artist_name like '%${artistname}%'`
+    }
+    else if(genre.length>0 &&artistname.length>0&&tracktitle.length>0){
+         sql = `select * from raw_tracks where  track_genres like '%${genre}%' AND artist_name like '%${artistname}%' AND track_title like '%${tracktitle}%'`
+    }
+    
+     database.query(sql,(err,results)=>{
+         if (err)return res.send(err.message)
+         res.send(results);
+     })
+}
