@@ -112,7 +112,7 @@ export default function SignUp() {
     if (nameErr || emailErr || passErr || confirmPassErr) {
       return;
     }
-    dispatch(register(data.get('username'),data.get('email'),data.get('password'))).then(
+    dispatch(register(data.get('userName'),data.get('email'),data.get('password'))).then(
       res => {
         console.log(res);
       }
