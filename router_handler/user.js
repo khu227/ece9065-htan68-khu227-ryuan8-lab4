@@ -29,6 +29,7 @@ function mail(to,title,content,callback) {
     });
 }
 
+
 // register an account with an email, a password and a name.
 exports.register = (req, res) => {
     const userinfo = req.body
@@ -51,27 +52,31 @@ exports.register = (req, res) => {
         const token = jwt.sign({ id: userinfo.Email }, config.jwtSecretKey, { expiresIn: '1h' }, (err, token) => {
             if (err) return console.log(err.message)
             // Send the email
-            mail(userinfo.Email, 'Email verification', `http://localhost:3009/verify/${token}`, (err, data) => {
+            mail(userinfo.Email, 'Email verification', `http://127.0.0.1:3009/api/open/verify/${token}`, (err, data) => {
+                console.log(token)
                 if (err) return console.log(err.message)
-                //check if the front end click the link in the email
-                const token = req.params.token
-                jwt.verify(token, config.jwtSecretKey, (err, decoded) => {
-                    if (err) return res.send({ status: 401, message: 'The link has expired' })
-                    const sql = `update user set is_active = 1 where Email=?`
-                    database.query(sql, [decoded.email], (err, results) => {
-                        if (err) return res.send({ status: 500, message: err.message })
-                        res.send({ status: 200, message: 'Your email has been verified' })
-                    })
-                })
                 // Insert the user into the database
-                const sql = `insert into user (Email, password, name) values (?, ?, ?)`
-                database.query(sql, [userinfo.Email, userinfo.password, userinfo.name], (err, results) => {
+                const sql = `insert into user set ?`
+                database.query(sql, userinfo, (err, results) => {
                     if (err) return console.log(err.message)
-                    res.send({ status: 200, message: 'The email has been sent, please check it' })
+                    res.send({ status: 200, message: 'Register successfully, please check your email' })
+                })
                 })
             })
+
+            })
+}
+// Verify the email
+exports.verify = (req, res) => {
+    const token = req.params.token
+    jwt.verify(token, config.jwtSecretKey, (err, decoded) => {
+        if (err) return res.send({ status: 401, message: 'The link is invalid' })
+        const sql = `update user set is_active=1 where Email=?`
+        database.query(sql, decoded.id, (err, results) => {
+            if (err) return console.log(err.message)
+            res.send({ status: 200, message: 'Email verification success' })
         } )
-    })
+    } )
 }
 
 // Login with an email and a password. Return a JWT token if successful.

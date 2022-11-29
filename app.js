@@ -13,7 +13,7 @@ const expressJWT = require('express-jwt')
 const config = require('./config')
 
 // expressJWT use for analysis token
-//unless: api/open is not need to analysis token
+//unless: api/open/login is not need to analysis token
 app.use(expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api\/open/] }))
 
 
