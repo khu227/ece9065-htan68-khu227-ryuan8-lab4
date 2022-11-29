@@ -28,6 +28,7 @@ function mail(to,title,content,callback) {
         callback &&  callback(err,data)
     });
 }
+
 // register an account with an email, a password and a name.
 exports.register = (req, res) => {
     const userinfo = req.body
@@ -50,8 +51,18 @@ exports.register = (req, res) => {
         const token = jwt.sign({ id: userinfo.Email }, config.jwtSecretKey, { expiresIn: '1h' }, (err, token) => {
             if (err) return console.log(err.message)
             // Send the email
-            mail(userinfo.Email, 'Email verification', `http://localhost:3000/verify/${token}`, (err, data) => {
+            mail(userinfo.Email, 'Email verification', `http://localhost:3009/verify/${token}`, (err, data) => {
                 if (err) return console.log(err.message)
+                //check if the front end click the link in the email
+                const token = req.params.token
+                jwt.verify(token, config.jwtSecretKey, (err, decoded) => {
+                    if (err) return res.send({ status: 401, message: 'The link has expired' })
+                    const sql = `update user set is_active = 1 where Email=?`
+                    database.query(sql, [decoded.email], (err, results) => {
+                        if (err) return res.send({ status: 500, message: err.message })
+                        res.send({ status: 200, message: 'Your email has been verified' })
+                    })
+                })
                 // Insert the user into the database
                 const sql = `insert into user (Email, password, name) values (?, ?, ?)`
                 database.query(sql, [userinfo.Email, userinfo.password, userinfo.name], (err, results) => {
