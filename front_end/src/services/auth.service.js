@@ -5,7 +5,7 @@ const API_URL = "http://127.0.0.1:3009/api/open/";
 
 const register = (username, email, password) => {
   return axios.post(API_URL + "register", {
-      email,
+      Email: email,
       password,
       name: username,
   })
