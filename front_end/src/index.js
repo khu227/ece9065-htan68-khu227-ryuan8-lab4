@@ -1,3 +1,5 @@
+// reference for login and logout: https://www.bezkoder.com/react-hooks-redux-login-registration-example/
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {
@@ -9,11 +11,18 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import router from './router/router.js';
+import { Provider } from "react-redux";
+import store from "./store";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      {/* <BrowserRouter> */}
+      <App />
+      {/* </BrowserRouter> */}
+      {/* <RouterProvider router={router} /> */}
+    </Provider>
   </React.StrictMode>
 );
 
