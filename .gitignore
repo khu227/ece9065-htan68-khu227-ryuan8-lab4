@@ -1,4 +1,7 @@
 .DS_Store
 node_modules/
 front_end/node_modules/
-.idea
+#ignore node_modules in all subdirectories and .DS_Store files and .idea files
+**/node_modules/
+**/.DS_Store
+**/.idea/
