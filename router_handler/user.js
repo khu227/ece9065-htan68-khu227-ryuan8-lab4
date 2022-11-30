@@ -28,6 +28,8 @@ function mail(to,title,content,callback) {
         callback &&  callback(err,data)
     });
 }
+
+
 // register an account with an email, a password and a name.
 exports.register = (req, res) => {
     const userinfo = req.body
@@ -50,17 +52,34 @@ exports.register = (req, res) => {
         const token = jwt.sign({ id: userinfo.Email }, config.jwtSecretKey, { expiresIn: '1h' }, (err, token) => {
             if (err) return console.log(err.message)
             // Send the email
-            mail(userinfo.Email, 'Email verification', `http://localhost:3000/verify/${token}`, (err, data) => {
+            //the host is the server ip address /api/open/verify/${token}
+            host = req.get('host')
+            link = "http://" + req.get('host') + "/api/open/verify/" + token
+            mail(userinfo.Email, 'Email verification', link, (err, data) => {
+                console.log(token)
                 if (err) return console.log(err.message)
                 // Insert the user into the database
-                const sql = `insert into user (Email, password, name) values (?, ?, ?)`
-                database.query(sql, [userinfo.Email, userinfo.password, userinfo.name], (err, results) => {
+                const sql = `insert into user set ?`
+                database.query(sql, userinfo, (err, results) => {
                     if (err) return console.log(err.message)
-                    res.send({ status: 200, message: 'The email has been sent, please check it' })
+                    res.send({ status: 200, message: 'Register successfully, please check your email' })
+                })
                 })
             })
+
+            })
+}
+// Verify the email
+exports.verify = (req, res) => {
+    const token = req.params.token
+    jwt.verify(token, config.jwtSecretKey, (err, decoded) => {
+        if (err) return res.send({ status: 401, message: 'The link is invalid' })
+        const sql = `update user set is_active=1 where Email=?`
+        database.query(sql, decoded.id, (err, results) => {
+            if (err) return console.log(err.message)
+            res.send({ status: 200, message: 'Email verification success' })
         } )
-    })
+    } )
 }
 
 // Login with an email and a password. Return a JWT token if successful.

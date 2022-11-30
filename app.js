@@ -13,7 +13,7 @@ const expressJWT = require('express-jwt')
 const config = require('./config')
 
 // expressJWT use for analysis token
-//unless: api/open is not need to analysis token
+//unless: api/open/login is not need to analysis token
 app.use(expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api\/open/] }))
 
 
@@ -53,9 +53,16 @@ app.use('/', favouritelistRouter);
 const userRouter = require('./router/user');
 app.use('/api/open', userRouter);
 
+//A mechanism is provided to update the password for an authenticated user.
+const changePasswordRouter = require('./router/password');
+app.use('/api/secure', changePasswordRouter);
+
 const adminRouter = require('./router/admin');
 app.use('/api/admin', adminRouter);
 
+//Add a review to a play-list
+const reviewRouter = require('./router/review');
+app.use('/api/secure', reviewRouter);
 
 app.listen(3009, function () {
   console.log('api server running at http://127.0.0.1:3009')
