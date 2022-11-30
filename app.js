@@ -56,6 +56,9 @@ app.use('/api/open', userRouter);
 const adminRouter = require('./router/admin');
 app.use('/api/admin', adminRouter);
 
+//Add a review to a play-list
+const reviewRouter = require('./router/review');
+app.use('/api/secure', reviewRouter);
 
 app.listen(3009, function () {
   console.log('api server running at http://127.0.0.1:3009')
