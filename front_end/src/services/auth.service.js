@@ -29,12 +29,12 @@ const register = (username, email, password) => {
 const login = (email, password) => {
   return axios
     .post(API_URL + "login", {
-      email,
+      Email: email,
       password,
     })
     .then((response) => {
       if (response.data.token) {
-        localStorage.setItem("user", JSON.stringify(response.data));
+        localStorage.setItem("userInfo", JSON.stringify(response.data));
       }
 
       return response.data;
@@ -42,7 +42,7 @@ const login = (email, password) => {
 };
 
 const logout = () => {
-  localStorage.removeItem("user");
+  localStorage.removeItem("userInfo");
 };
 
 export default {

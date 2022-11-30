@@ -14,6 +14,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
+import { useNavigate } from "react-router-dom";
 import validator from 'validator';
 import { useDispatch, useSelector } from "react-redux";
 import { login } from '../actions/auth';
@@ -32,9 +34,12 @@ const theme = createTheme();
 
 export default function SignIn() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [emailErr, setEmailErr] = useState('');
   const [passErr, setPassErr] = useState('');
+
+  const { successMessage, failMessage } = useSelector(state => state.message);
 
   const handleEmailChange = e => {
     const email = e.currentTarget.value;
@@ -61,13 +66,26 @@ export default function SignIn() {
     if (!password) {
       setPassErr('empty!');
     }
-    dispatch(login(email, password));
+    dispatch(login(email, password))
+      .then(() => {
+        navigate('/');
+        window.location.reload();
+      })
+      .catch(err => {
+        console.log(err);
+      });
     // login(email, password)();
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
+        {successMessage &&
+          <Alert severity="success">{successMessage}</Alert>}
+        {
+          failMessage &&
+          <Alert severity="error">{failMessage}</Alert>
+        }
         <CssBaseline />
         <Box
           sx={{

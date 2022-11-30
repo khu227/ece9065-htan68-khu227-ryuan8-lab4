@@ -4,9 +4,12 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  SET_MESSAGE,
-  TOURIST,
+  SET_SUCCESS_MESSAGE,
+  SET_FAIL_MESSAGE
+  // TOURIST,
 } from "./types";
+
+import { useNavigate } from "react-router-dom";
 
 import AuthService from "../services/auth.service";
 
@@ -17,10 +20,10 @@ export const register = (username, email, password) => (dispatch) => {
         type: REGISTER_SUCCESS,
       });
 
-      // dispatch({
-      //   type: SET_MESSAGE,
-      //   payload: response.data.message,
-      // });
+      dispatch({
+        type: SET_SUCCESS_MESSAGE,
+        payload: response.data.message,
+      });
 
       return Promise.resolve();
     },
@@ -36,10 +39,10 @@ export const register = (username, email, password) => (dispatch) => {
         type: REGISTER_FAIL,
       });
 
-      // dispatch({
-      //   type: SET_MESSAGE,
-      //   payload: message,
-      // });
+      dispatch({
+        type: SET_FAIL_MESSAGE,
+        payload: message,
+      });
 
       return Promise.reject();
     }
@@ -52,6 +55,11 @@ export const login = (username, password) => (dispatch) => {
       dispatch({
         type: LOGIN_SUCCESS,
         payload: { user: data },
+      });
+
+      dispatch({
+        type: SET_SUCCESS_MESSAGE,
+        payload: data.message,
       });
 
       return Promise.resolve();
@@ -68,10 +76,10 @@ export const login = (username, password) => (dispatch) => {
         type: LOGIN_FAIL,
       });
 
-      // dispatch({
-      //   type: SET_MESSAGE,
-      //   payload: message,
-      // });
+      dispatch({
+        type: SET_FAIL_MESSAGE,
+        payload: message,
+      });
 
       return Promise.reject();
     }
@@ -86,6 +94,6 @@ export const logout = () => (dispatch) => {
   });
 };
 
-export const tourist = () => (dispatch) => {
-  dispatch({type: TOURIST});
-};
+// export const tourist = () => (dispatch) => {
+//   dispatch({type: TOURIST});
+// };

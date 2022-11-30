@@ -5,6 +5,7 @@ import Home from '../pages/home.js';
 import SignIn from '../pages/signin.js';
 import SignUp from '../pages/signup.js';
 import TrackSearch from '../pages/trackSearch.js';
+import Alter from '../pages/alter.js';
 
 const router = createBrowserRouter([
     {
@@ -12,16 +13,20 @@ const router = createBrowserRouter([
         element: <Home/>
     },
     {
-        path: 'signin',
+        path: '/signin',
         element: <SignIn/>
     },
     {
-        path: 'signup',
+        path: '/signup',
         element: <SignUp/>
     },
     {
         path: '/search',
         element: <TrackSearch/>
+    },
+    {
+        path: '/alter',
+        element: <Alter/>
     }
 ]);
 

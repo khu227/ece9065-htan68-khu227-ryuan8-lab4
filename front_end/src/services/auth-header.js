@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 export default function authHeader() {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   
-    if (user && user.token) {
+    if (userInfo && userInfo.token) {
       // for Node.js Express back-end
-      return { 'x-access-token': user.token };
+      return { 'x-access-token': userInfo.token };
     } else {
       return {};
     }

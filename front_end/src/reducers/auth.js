@@ -7,21 +7,21 @@ import {
     TOURIST
 } from "../actions/types";
 
-const user = JSON.parse(localStorage.getItem("user"));
+const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-const initialState = user
-    ? { isLoggedIn: true, user }
-    : { isLoggedIn: false, user: null };
+const initialState = userInfo
+    ? { isLoggedIn: true, userInfo }
+    : { isLoggedIn: false, userInfo: null };
 
 export default function (state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
-        case TOURIST:
-            return {
-                ...state,
-                isLoggedIn: false,
-            }
+        // case TOURIST:
+        //     return {
+        //         ...state,
+        //         isLoggedIn: false,
+        //     }
         case REGISTER_SUCCESS:
             return {
                 ...state,
@@ -36,19 +36,19 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 isLoggedIn: true,
-                user: payload.user,
+                userInfo: payload.user,
             };
         case LOGIN_FAIL:
             return {
                 ...state,
                 isLoggedIn: false,
-                user: null,
+                userInfo: null,
             };
         case LOGOUT:
             return {
                 ...state,
                 isLoggedIn: false,
-                user: null,
+                userInfo: null,
             };
         default:
             return state;
