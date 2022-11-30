@@ -52,7 +52,10 @@ exports.register = (req, res) => {
         const token = jwt.sign({ id: userinfo.Email }, config.jwtSecretKey, { expiresIn: '1h' }, (err, token) => {
             if (err) return console.log(err.message)
             // Send the email
-            mail(userinfo.Email, 'Email verification', `http://127.0.0.1:3009/api/open/verify/${token}`, (err, data) => {
+            //the host is the server ip address /api/open/verify/${token}
+            host = req.get('host')
+            link = "http://" + req.get('host') + "/api/open/verify/" + token
+            mail(userinfo.Email, 'Email verification', link, (err, data) => {
                 console.log(token)
                 if (err) return console.log(err.message)
                 // Insert the user into the database
