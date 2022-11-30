@@ -53,6 +53,10 @@ app.use('/', favouritelistRouter);
 const userRouter = require('./router/user');
 app.use('/api/open', userRouter);
 
+//A mechanism is provided to update the password for an authenticated user.
+const changePasswordRouter = require('./router/password');
+app.use('/api/secure', changePasswordRouter);
+
 const adminRouter = require('./router/admin');
 app.use('/api/admin', adminRouter);
 
