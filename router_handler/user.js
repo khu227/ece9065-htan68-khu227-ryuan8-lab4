@@ -61,7 +61,7 @@ exports.register = (req, res) => {
                 // Insert the user into the database
                 const sql = `insert into user set ?`
                 database.query(sql, userinfo, (err, results) => {
-                    if (err) return send({ status: 401, message: err.message })
+                    if (err) return res.send({ status: 401, message: err.message })
                     res.send({ status: 200, message: 'Register successfully, please check your email' })
                 })
                 })
