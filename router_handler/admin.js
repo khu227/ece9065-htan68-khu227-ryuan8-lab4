@@ -75,12 +75,13 @@ exports.hideReview = (req, res) => {
         if (err) return console.log(err.message)
         if (results.length !== 1) return res.send('You are not an administrator')
         //Hide one or more reviews
-        const sql = `update review set is_hidden = 1 where id = ?`
+        const sql = `update review set hidden = 1 where id = ?`
         database .query(sql, req.body.list_id, (err, results) => {
             if (err) return console.log(err.message)
             if (results.affectedRows === 0) return res.send('The review does not exist')
             res.send({status:400,message:'The review was hidden successfully'})
         } )
+    })
 }
 
 
