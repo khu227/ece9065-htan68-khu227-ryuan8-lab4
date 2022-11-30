@@ -81,6 +81,7 @@ exports.hideReview = (req, res) => {
             if (results.affectedRows === 0) return res.send('The review does not exist')
             res.send({status:400,message:'The review was hidden successfully'})
         } )
+    })
 }
 
 
