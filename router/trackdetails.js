@@ -12,6 +12,15 @@ router.get('/musicdatas/:track_title:artist_name:album_title', trackdetails_hand
 
 // lab4-3 unauthenticated user
 router.get('/api/open/trackDetailsBycombi',trackdetails_handler.getTrackByCombi)
- 
+router.get('/api/open/tenPublicList', trackdetails_handler.tenPublicList);//get list info
+router.get('/api/open/tenPublicListMore', trackdetails_handler.tenPublicListMore);//allow user to get more track detail saved in list.
+
+
+//lab4-4 authenticated user
+router.post('/api/secure/userNewList', trackdetails_handler.userNewList);
+//router.get('/api/secure/userListInfo', trackdetails_handler.userListInfo);
+router.post('/api/secure/newPlayListAspects', trackdetails_handler.newPlayListAspects);
+router.post('/api/secure/delExitList', trackdetails_handler.delExitList);
 module.exports = router;
+
 
