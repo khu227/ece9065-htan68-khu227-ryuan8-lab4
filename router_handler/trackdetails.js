@@ -107,7 +107,7 @@ exports.getTrackByCombi = (req,res) =>{
 } 
 exports.tenPublicList = (req, res) => {
   
-    const sql = `select list_name,count(trackInList.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from ((raw_tracks join trackInList on trackInList.track_id=raw_tracks.track_id) join play_list on play_list.list_id = trackInList.list_id)group by list_name ORDER BY play_list.update_time limit 10 `    
+    const sql = `select list_name,count(trackInList.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from ((raw_tracks join trackInList on trackInList.track_id=raw_tracks.track_id ) join play_list on play_list.list_id = trackInList.list_id and play_list.public = 1)group by list_name ORDER BY play_list.update_time limit 10 `    
     //const sql = 'select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id)order by play_list.update_time, play_list.list_name'
         database.query(sql, (err, results) => {
             if (err) return res.send({ status: 401, message: err.message })
