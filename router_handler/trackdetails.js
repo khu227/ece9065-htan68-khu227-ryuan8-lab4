@@ -1,4 +1,5 @@
 const database = require('../database/index')
+var stringSimilarity = require("string-similarity");
 //item 3
 exports.getTrackdetails = (req, res) => {
     const sql = `select album_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration, track_genres, track_number, track_title from raw_tracks where track_id=?`
@@ -36,30 +37,67 @@ exports.getMusicData = (req, res) => {
 
 // lab4 3:b+c+e(part)
 exports.getTrackByCombi = (req,res) =>{
-    const tracktitle = req.query.track_title.replace(' ','')
-    const artistname = req.query.artist_name.replace(' ','')
-    const genre = req.query.track_genres.replace(' ','')
+    // const soft_tracktitle = req.body.track_title
+    // const soft_artistname = req.body.artist_name
+    // const soft_genre = req.body.track_genres
+    // const softsqla = 'select track_title, artist_name, track_genres from raw_tracks'
+    // var tracktitle = '';
+    // var artistname = '';
+    // var genre = '';
+    // let rating=0
+    // let last_rating = 0
+    // var track_title_array =[];
+    // var artist_name_array = [];
+    // var track_genres_array = [];
+    // database.query(softsqla, (err, results) => {
+    //     if (err) return res.send({ status: 401, message: err.message })
+    //     for(var i =0; i<results.length; i++){
+            
+    //          track_title_array.push('"'+results[i].track_title+'"')
+    //          artist_name_array.push('"'+results[i].artist_name+'"')
+    //          track_genres_array.push('"'+results[i].track_genres+'"')
+    //          rating = stringSimilarity.compareTwoStrings(`"${soft_tracktitle}"`, track_title_array[i]);
+    //          last_rating = rating
+    //          console.log(rating)
+    //          console.log(last_rating)
+
+    //     }
+
+    //     tracktitle = stringSimilarity.findBestMatch(`"${soft_tracktitle}"`,track_title_array)
+    //     artistname = stringSimilarity.findBestMatch(`"${soft_artistname}"`,artist_name_array)
+    //     genre = stringSimilarity.findBestMatch(`"${soft_genre}"`,track_genres_array)
+    // })
+    // console.log(tracktitle)
+    // console.log(artistname)
+    // console.log(genre)
+
+
+    const tracktitle = req.body.track_title
+    const artistname = req.body.artist_name
+    const genre = req.body.track_genres
+
+
     let sql = '';
     if(artistname.length===0 &&genre.length===0&&tracktitle.length>0){
-         sql = `select * from raw_tracks where track_title like '%${tracktitle}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where track_title like '%${tracktitle}%'`
     }
     else if(tracktitle.length===0 &&genre.length===0&&artistname.length>0){
-         sql = `select * from raw_tracks where  artist_name like '%${artistname}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where  artist_name like '%${artistname}%'`
     }
     else if(artistname.length===0 &&tracktitle.length===0&&genre.length>0){
-         sql = `select * from raw_tracks where track_genres like '%${genre}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where track_genres like '%${genre}%'`
     }
     else if(artistname.length>0 &&tracktitle.length>0&&genre.length===0){
-         sql = `select * from raw_tracks where  artist_name like '%${artistname}%' AND track_title like '%${tracktitle}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where  artist_name like '%${artistname}%' AND track_title like '%${tracktitle}%'`
     }
     else if(genre.length>0 &&tracktitle.length>0&&artistname.length===0){
-         sql = `select * from raw_tracks where  track_genres like '%${genre}%' AND track_title like '%${tracktitle}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where  track_genres like '%${genre}%' AND track_title like '%${tracktitle}%'`
     }
     else if(genre.length>0 &&artistname.length>0&&tracktitle.length===0){
-         sql = `select * from raw_tracks where  track_genres like '%${genre}%' AND artist_name like '%${artistname}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where  track_genres like '%${genre}%' AND artist_name like '%${artistname}%'`
     }
     else if(genre.length>0 &&artistname.length>0&&tracktitle.length>0){
-         sql = `select * from raw_tracks where  track_genres like '%${genre}%' AND artist_name like '%${artistname}%' AND track_title like '%${tracktitle}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where  track_genres like '%${genre}%' AND artist_name like '%${artistname}%' AND track_title like '%${tracktitle}%'`
     }
     
      database.query(sql,(err,results)=>{
@@ -77,13 +115,19 @@ exports.tenPublicList = (req, res) => {
         })
     }
     exports.tenPublicListMore = (req, res) => {
-      
-        //const sql = `select list_name,count(trackInList.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from ((raw_tracks join trackInList on trackInList.track_id=raw_tracks.track_id) join play_list on play_list.list_id = trackInList.list_id)group by list_name ORDER BY play_list.update_time limit 10 `    
-        const sql = 'select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id)order by play_list.update_time, play_list.list_name'
-            database.query(sql, (err, results) => {
+      const list_name = req.body.list_name
+      const topsql = `select list_id from play_list where list_name = '${list_name}'`
+      let local_listid = 0
+      database.query(topsql, (err, results) => {
+        local_listid = results[0].list_id
+        //const sql = 'select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id) order by play_list.update_time, play_list.list_name'
+        const sql = `select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON ${local_listid} = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id) order by play_list.update_time, play_list.list_name`
+  
+        database.query(sql, (err, results) => {
                 if (err) return res.send({ status: 401, message: err.message })
                 res.send(results)
             })
+        })
         }
     
     //L4-4a
