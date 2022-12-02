@@ -22,6 +22,7 @@ export default function Alter() {
     const [passErr, setPassErr] = useState('');
     const [confirmPassErr, setConfirmPassErr] = useState('');
 
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const { successMessage, failMessage } = useSelector(state => state.message);
@@ -60,6 +61,7 @@ export default function Alter() {
         const data = new FormData(e.currentTarget);
         const password = data.get('password');
         dispatch(alterPass(password));
+        navigate('/');
     };
 
     return (

@@ -103,8 +103,8 @@ export const logout = () => (dispatch) => {
   });
 };
 
-export const alterPass = () => (dispatch) => {
-  AuthService.alterPass().then(
+export const alterPass = (password) => (dispatch) => {
+  AuthService.alterPass(password).then(
     response => {
       console.log(response);
     }

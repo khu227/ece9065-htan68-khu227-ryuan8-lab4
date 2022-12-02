@@ -47,11 +47,21 @@ const logout = () => {
 };
 
 const alterPass = password => {
-  return axios
-    .post('http://127.0.0.1:3009/api/secure/password',
-      { password },
-      { headers: authHeader() },
-    )
+
+  // return axios
+  //   .post('http://127.0.0.1:3009/api/secure/update',
+  //     { newpassword: password },
+  //     { headers : headers}
+  //   )
+  //   .then(response => {
+  //     return response.data;
+  // });
+  return axios({
+    method: 'post',
+    url: 'http://127.0.0.1:3009/api/secure/update',
+    headers: authHeader(),
+    data: { newpassword: password }
+  })
     .then(response => {
       return response.data;
     });

@@ -5,7 +5,10 @@ export default function authHeader() {
 
   if (userInfo && userInfo.token) {
     // for Node.js Express back-end
-    return { 'Authorization': userInfo.token };
+    console.log(userInfo.token);
+    return {
+      "Authorization": userInfo.token
+    };
   } else {
     return {};
   }
