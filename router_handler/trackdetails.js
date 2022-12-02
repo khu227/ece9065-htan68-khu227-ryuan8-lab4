@@ -1,4 +1,5 @@
 const database = require('../database/index')
+var stringSimilarity = require("string-similarity");
 //item 3
 exports.getTrackdetails = (req, res) => {
     const sql = `select album_id, album_title, artist_id, artist_name, tags, track_date_created, track_date_recorded, track_duration, track_genres, track_number, track_title from raw_tracks where track_id=?`
@@ -36,30 +37,67 @@ exports.getMusicData = (req, res) => {
 
 // lab4 3:b+c+e(part)
 exports.getTrackByCombi = (req,res) =>{
-    const tracktitle = req.query.track_title.replace(' ','')
-    const artistname = req.query.artist_name.replace(' ','')
-    const genre = req.query.track_genres.replace(' ','')
+    // const soft_tracktitle = req.body.track_title
+    // const soft_artistname = req.body.artist_name
+    // const soft_genre = req.body.track_genres
+    // const softsqla = 'select track_title, artist_name, track_genres from raw_tracks'
+    // var tracktitle = '';
+    // var artistname = '';
+    // var genre = '';
+    // let rating=0
+    // let last_rating = 0
+    // var track_title_array =[];
+    // var artist_name_array = [];
+    // var track_genres_array = [];
+    // database.query(softsqla, (err, results) => {
+    //     if (err) return res.send({ status: 401, message: err.message })
+    //     for(var i =0; i<results.length; i++){
+            
+    //          track_title_array.push('"'+results[i].track_title+'"')
+    //          artist_name_array.push('"'+results[i].artist_name+'"')
+    //          track_genres_array.push('"'+results[i].track_genres+'"')
+    //          rating = stringSimilarity.compareTwoStrings(`"${soft_tracktitle}"`, track_title_array[i]);
+    //          last_rating = rating
+    //          console.log(rating)
+    //          console.log(last_rating)
+
+    //     }
+
+    //     tracktitle = stringSimilarity.findBestMatch(`"${soft_tracktitle}"`,track_title_array)
+    //     artistname = stringSimilarity.findBestMatch(`"${soft_artistname}"`,artist_name_array)
+    //     genre = stringSimilarity.findBestMatch(`"${soft_genre}"`,track_genres_array)
+    // })
+    // console.log(tracktitle)
+    // console.log(artistname)
+    // console.log(genre)
+
+
+    const tracktitle = req.body.track_title
+    const artistname = req.body.artist_name
+    const genre = req.body.track_genres
+
+
     let sql = '';
     if(artistname.length===0 &&genre.length===0&&tracktitle.length>0){
-         sql = `select * from raw_tracks where track_title like '%${tracktitle}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where track_title like '%${tracktitle}%'`
     }
     else if(tracktitle.length===0 &&genre.length===0&&artistname.length>0){
-         sql = `select * from raw_tracks where  artist_name like '%${artistname}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where  artist_name like '%${artistname}%'`
     }
     else if(artistname.length===0 &&tracktitle.length===0&&genre.length>0){
-         sql = `select * from raw_tracks where track_genres like '%${genre}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where track_genres like '%${genre}%'`
     }
     else if(artistname.length>0 &&tracktitle.length>0&&genre.length===0){
-         sql = `select * from raw_tracks where  artist_name like '%${artistname}%' AND track_title like '%${tracktitle}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where  artist_name like '%${artistname}%' AND track_title like '%${tracktitle}%'`
     }
     else if(genre.length>0 &&tracktitle.length>0&&artistname.length===0){
-         sql = `select * from raw_tracks where  track_genres like '%${genre}%' AND track_title like '%${tracktitle}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where  track_genres like '%${genre}%' AND track_title like '%${tracktitle}%'`
     }
     else if(genre.length>0 &&artistname.length>0&&tracktitle.length===0){
-         sql = `select * from raw_tracks where  track_genres like '%${genre}%' AND artist_name like '%${artistname}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where  track_genres like '%${genre}%' AND artist_name like '%${artistname}%'`
     }
     else if(genre.length>0 &&artistname.length>0&&tracktitle.length>0){
-         sql = `select * from raw_tracks where  track_genres like '%${genre}%' AND artist_name like '%${artistname}%' AND track_title like '%${tracktitle}%'`
+         sql = `select track_title,artist_name,album_title,track_date_created,track_language_code,track_favorites,track_genres from raw_tracks where  track_genres like '%${genre}%' AND artist_name like '%${artistname}%' AND track_title like '%${tracktitle}%'`
     }
     
      database.query(sql,(err,results)=>{
@@ -67,3 +105,186 @@ exports.getTrackByCombi = (req,res) =>{
          res.send(results);
      })
 } 
+exports.tenPublicList = (req, res) => {
+  
+    const sql = `select list_name,count(trackInList.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from ((raw_tracks join trackInList on trackInList.track_id=raw_tracks.track_id ) join play_list on play_list.list_id = trackInList.list_id and play_list.public = 1)group by list_name ORDER BY play_list.update_time limit 10 `    
+    //const sql = 'select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id)order by play_list.update_time, play_list.list_name'
+        database.query(sql, (err, results) => {
+            if (err) return res.send({ status: 401, message: err.message })
+            res.send(results)
+        })
+    }
+    exports.tenPublicListMore = (req, res) => {
+      const list_name = req.body.list_name
+      const topsql = `select list_id from play_list where list_name = '${list_name}'`
+      let local_listid = 0
+      database.query(topsql, (err, results) => {
+        local_listid = results[0].list_id
+        //const sql = 'select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id) order by play_list.update_time, play_list.list_name'
+        const sql = `select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON ${local_listid} = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id) order by play_list.update_time, play_list.list_name`
+  
+        database.query(sql, (err, results) => {
+                if (err) return res.send({ status: 401, message: err.message })
+                res.send(results)
+            })
+        })
+        }
+    
+    //L4-4a
+    //create up 20 play-list for authorized user
+    exports.userNewList = (req, res) => {
+        var currentdate = new Date(); 
+        var datetime = currentdate.getFullYear() + "-"
+                        + (currentdate.getMonth()+1)  + "-" 
+                        + currentdate.getDate() + "  "  
+                        + currentdate.getHours() + ":"  
+                        + currentdate.getMinutes() + ":" 
+                        + currentdate.getSeconds();
+     
+        const name = req.user.name
+        const list_name = req.body.list_name
+        const description = req.body.description
+        const list_of_tracks = req.body.list_of_tracks
+        const visibility = req.body.visibility
+        
+        const sql = `select user_name from play_list where user_name = '${name}'`
+        database.query(sql, (err, results) => {
+            if (err) return res.send({ status: 401, message: err.message })
+            if (results.length>20){
+                res.send({ status: 401, message: 'Your playlist is full, please delete it and use it later!' })
+            }else{
+                const sql = `select list_name from play_list where list_name='${list_name}'`
+                database.query(sql,(err,results) => {
+    
+            //to-do err message
+            if (err) return console.log(err.message)
+            if(results.length>0) return res.send({status:401,message:"The list name already exists"})
+    
+            const sql =`INSERT INTO play_list (list_name, public, update_time, description, user_name)VALUES ('${list_name}', '${visibility}','${datetime}','${description}','${name}');`
+            database.query(sql,[req.body],(err,results) =>{
+                if (err) return res.send({ status: 1, message: 'Failed to add play list' })
+                res.send({ status: 1, message: 'The list was added successfully' })
+                const array = String(list_of_tracks).split(',')
+                const listnamesql = `select list_id from play_list where list_name = '${list_name}'`
+                let local_listid = 0
+                database.query(listnamesql,(err,results) =>{    //take a list of track id and save it in created play list
+                    if (err) return res.send({ status: 1, message: err.message })
+                     local_listid = results[0].list_id  
+                     for(let i=0; i<array.length;i++){
+                       let sqlin = `Insert into trackInList (list_id,track_id)VALUES('${local_listid}','${array[i].replace('"','')}')`
+                       database.query(sqlin,(err,results) =>{
+                        if (err) return res.send({ status: 1, message: err.message })
+                       })
+                    }  
+                    
+                })
+                
+            })
+        })
+            }
+        })
+    }
+        
+    
+    // exports.userListInfo = (req, res) => {
+    //     const name = req.user.name
+    //     const sql = `select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id and paly_list.user_name = '${name}') join raw_tracks on trackInList.track_id = raw_tracks.track_id)order by play_list.update_time, play_list.list_name`
+    //     database.query(sql, (err, results) => {
+    //         if (err) return res.send({ status: 401, message: err.message })
+    //         res.send(results)
+    
+    //     })
+    
+    
+    
+    
+    // }
+    //4c user able to edit all aspects of an existing list
+    exports.newPlayListAspects = (req, res) => {
+        var currentdate = new Date(); 
+        var datetime = currentdate.getFullYear() + "-"
+                        + (currentdate.getMonth()+1)  + "-" 
+                        + currentdate.getDate() + "  "  
+                        + currentdate.getHours() + ":"  
+                        + currentdate.getMinutes() + ":" 
+                        + currentdate.getSeconds();
+     
+        const name = req.user.name
+        const list_name = req.body.list_name
+        const description = req.body.description
+        const list_of_tracks = req.body.list_of_tracks
+        const visibility = req.body.visibility
+        const listid = req.body.list_id
+        
+    
+        const sql = `select list_name from play_list where list_name='${list_name}' and list_id != '${listid}'`
+        database.query(sql, (err, results) => {
+            if (err) return res.send({ status: 401, message: err.message })
+            if(results.length>0) return res.send({status:401,message:"The list name already exists"})
+    
+            const sqls =`update play_list set list_name ='${list_name}', public = ${visibility}, update_time = '${datetime}', description = '${description}', user_name = '${name}' where list_id = '${listid}' `
+            database.query(sqls,(err,results) =>{
+                if (err) return res.send({ status: 1, message: err.message })
+                
+                const array = String(list_of_tracks).split(',')
+                let sqldele = `DELETE FROM trackInList WHERE list_id='${listid}'`
+                database.query(sqldele,(err,results) =>{
+                        if (err) return res.send({ status: 1, message: err.message })
+    
+                        for(let i=0; i<array.length;i++){
+                            let sqlin = `Insert into trackInList (list_id,track_id)VALUES('${listid}','${array[i].replace('"','')}')`
+                            database.query(sqlin,(err,results) =>{
+                             if (err) return res.send({ status: 1, message: err.message })
+                             
+                            })
+                         }      
+                    
+                    })
+    
+              
+                    res.send({ status: 1, message: 'The list was edit successfully' })
+            })
+            
+        })
+            }
+    
+    
+            
+    exports.delExitList = (req, res) => {
+        const list_name = req.body.list_name
+        const sql = `select list_name from play_list where list_name='${list_name}'`
+        database.query(sql, (err, results) => {
+            if(results.length=0) return res.send({status:401,message:"The list name doesn't exists"})
+            const listnamesql = `select list_id from play_list where list_name = '${list_name}'`
+                let local_listid = 0
+                database.query(listnamesql,(err,results) =>{ 
+                    if (err) return res.send({ status: 1, message: err.message })
+                     local_listid = results[0].list_id 
+                     const delreview = `DELETE FROM review WHERE list_id = '${local_listid}'`
+                     database.query(delreview, (err, results) => {
+                         if (err) return res.send({ status: 1, message: err.message })
+    
+                     })
+                     
+                     const cleansql = `DELETE FROM trackInList WHERE list_id = '${local_listid}'`
+                     database.query(cleansql, (err, results) => {
+                        if (err) return res.send({ status: 1, message: err.message })
+    
+                       
+    
+                        const deleatemain = `DELETE FROM play_list WHERE list_name = '${list_name}'`
+                        database.query(deleatemain, (err, results) => {
+                            if (err) return res.send({ status: 1, message: err.message })
+                        })
+    
+                   
+    
+                     })
+    
+                })
+    
+                res.send({ status: 1, message: 'the list have deleted sucessfully' })
+        })
+    
+    
+    }
