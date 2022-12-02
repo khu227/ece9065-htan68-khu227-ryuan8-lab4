@@ -6,8 +6,8 @@ exports.getUserName = (req, res) => {
     database.query(sql, req.user.id, (err, results) => {
         if (err) return console.log(err.message)
         if (results.length !== 1) return res.send('You are not an administrator')
-        //Get the user's name which is not an administrator
-        const sql = `select name from user where is_admin = 0`
+        //Get the user's name and is_active which is not an administrator
+        const sql = `select name,is_active from user where is_admin = 0`
         database.query(sql, (err, results) => {
             if (err) return console.log(err.message)
             res.send({
