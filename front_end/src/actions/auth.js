@@ -16,13 +16,14 @@ import AuthService from "../services/auth.service";
 export const register = (username, email, password) => (dispatch) => {
   return AuthService.register(username, email, password).then(
     (response) => {
+      console.log(response);
       dispatch({
         type: REGISTER_SUCCESS,
       });
 
       dispatch({
         type: SET_SUCCESS_MESSAGE,
-        payload: response.data.message,
+        payload: response.message,
       });
 
       return Promise.resolve();
@@ -52,6 +53,14 @@ export const register = (username, email, password) => (dispatch) => {
 export const login = (username, password) => (dispatch) => {
   return AuthService.login(username, password).then(
     (data) => {
+      console.log(data);
+      if (data.status != 200) {
+        dispatch({
+          type: SET_FAIL_MESSAGE,
+          payload: data.message,
+        });
+        return Promise.reject();
+      }
       dispatch({
         type: LOGIN_SUCCESS,
         payload: { user: data },
@@ -92,6 +101,14 @@ export const logout = () => (dispatch) => {
   dispatch({
     type: LOGOUT,
   });
+};
+
+export const alterPass = () => (dispatch) => {
+  AuthService.alterPass().then(
+    response => {
+      console.log(response);
+    }
+  );
 };
 
 // export const tourist = () => (dispatch) => {

@@ -12,15 +12,18 @@ import SignIn from './pages/signin.js';
 import SignUp from './pages/signup.js';
 import TrackSearch from './pages/trackSearch.js';
 import Alter from './pages/alter.js';
+import Verify from './pages/verify';
+import Admin from './pages/admin';
 
 function App() {
   // const [loggedIn, setLoggedIn] = useState(false);
   // const [isAdmin, setIsAdmin] = useState(false);
   
   const auth = useSelector(state => state.auth);
-  const { isLoggedIn , user} = auth;
+  console.log(auth);
+  const { isLoggedIn , userInfo} = auth;
   let isAdmin = false;
-  user && (isAdmin = user.is_admin);
+  userInfo && userInfo.user && (isAdmin = userInfo.user.is_admin);
 
   return (
     <div className="App">
@@ -35,6 +38,8 @@ function App() {
         <Route path="/signup" element={<SignUp/>}></Route>
         <Route path="/search" element={<TrackSearch/>}></Route>
         <Route path="/alter" element={<Alter/>}></Route>
+        <Route path="/verify" element={<Verify/>}></Route>
+        <Route path="/admin" element={<Admin/>}></Route>
       </Routes>
     </div>
   );

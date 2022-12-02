@@ -69,7 +69,7 @@ export default function SignIn() {
     dispatch(login(email, password))
       .then(() => {
         navigate('/');
-        window.location.reload();
+        // window.location.reload();
       })
       .catch(err => {
         console.log(err);
@@ -80,8 +80,10 @@ export default function SignIn() {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
-        {successMessage &&
-          <Alert severity="success">{successMessage}</Alert>}
+        {
+          successMessage &&
+          <Alert severity="success">{successMessage}</Alert>
+        }
         {
           failMessage &&
           <Alert severity="error">{failMessage}</Alert>

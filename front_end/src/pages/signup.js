@@ -17,6 +17,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch, useSelector } from "react-redux";
 import { register } from '../actions/auth';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -32,6 +33,8 @@ const theme = createTheme();
 
 export default function SignUp() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
 
   const [nameErr, setNameErr] = useState('');
   const [emailErr, setEmailErr] = useState('');
@@ -40,10 +43,10 @@ export default function SignUp() {
   const [pass, setPass] = useState('');
 
   const handleNameChange = e => {
-    if(!e.currentTarget.value) {
+    if (!e.currentTarget.value) {
       setNameErr('empty!');
     }
-    else{
+    else {
       setNameErr('');
     }
   }
@@ -112,11 +115,15 @@ export default function SignUp() {
     if (nameErr || emailErr || passErr || confirmPassErr) {
       return;
     }
-    dispatch(register(data.get('userName'),data.get('email'),data.get('password'))).then(
-      res => {
-        console.log(res);
+    dispatch(register(data.get('userName'), data.get('email'), data.get('password'))).then(
+      () => {
+        navigate('/verify');
+        // window.location.reload();
       }
     )
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (

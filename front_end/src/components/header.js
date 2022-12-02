@@ -39,7 +39,22 @@ function Header(props) {
 
     const auth = useSelector(state => state.auth);
 
-    isAdmin && pages.push('Administrator');
+    // isAdmin && pages.push('Administrator');
+
+    const pages = [
+        'Track Searching', 'Public Play-lists',
+        ...(
+            isLoggedIn ?
+            ['Manage Play-lists']
+            : []
+        ),
+        ...(isAdmin ?
+            ['Administrator']
+            : [])
+    ];
+
+
+    console.log('isAdmain:' + isAdmin);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
