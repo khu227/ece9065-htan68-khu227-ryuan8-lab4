@@ -7,17 +7,17 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Checkbox from '@mui/material/Checkbox';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch, useSelector } from "react-redux";
 import { register } from '../actions/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -41,6 +41,8 @@ export default function SignUp() {
   const [passErr, setPassErr] = useState('');
   const [confirmPassErr, setConfirmPassErr] = useState('');
   const [pass, setPass] = useState('');
+  const [checked, setChecked] = useState(false);
+  const [checkedErr, setCheckedErr] = useState('');
 
   const handleNameChange = e => {
     if (!e.currentTarget.value) {
@@ -53,7 +55,6 @@ export default function SignUp() {
 
   const handleEmailChange = e => {
     const email = e.currentTarget.value;
-    // console.log(email);
     if (validator.isEmail(email)) {
       setEmailErr('');
     }
@@ -67,13 +68,11 @@ export default function SignUp() {
     if (!pass) {
       setPassErr('empty!')
     }
-    // console.log(pass);
     setPass(pass);
   };
 
   const handleConfirmPassChange = e => {
     const confirmPass = e.currentTarget.value;
-    // console.log(confirmPass);
     if (!confirmPass) {
       setConfirmPassErr('empty!');
     }
@@ -85,45 +84,62 @@ export default function SignUp() {
     }
   };
 
+  const handleCheck = event => {
+    const checked = event.target.checked;
+    setChecked(checked);
+    if(checked){
+      setCheckedErr('');
+    }
+    else{
+      setCheckedErr('please confirm to sign up!');
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-    // console.log(data.keys());
-    // for(let i of data.keys()){
-    //   console.log(i);
-    // }
     console.log({
       username: data.get('userName'),
       email: data.get('email'),
       password: data.get('password'),
       confirmPass: data.get('confirmpassword')
     });
+    let ret = false;
     if (!data.get('userName')) {
       setNameErr('empty!');
+      ret = true;
     }
     if (!data.get('email')) {
       setEmailErr('empty!');
+      ret = true;
     }
     if (!data.get('password')) {
-      // console.log(data.get('password'));
       setPassErr('empty!');
+      ret = true;
     }
     if (!data.get('confirmpassword')) {
       setConfirmPassErr('empty!');
+      ret = true;
     }
-    if (nameErr || emailErr || passErr || confirmPassErr) {
+    if (!checked) {
+      setCheckedErr('please confirm to sign up!');
+      ret = true;
+    }
+    if (ret) {
       return;
     }
-    dispatch(register(data.get('userName'), data.get('email'), data.get('password'))).then(
-      () => {
-        navigate('/verify');
-        // window.location.reload();
-      }
-    )
-      .catch(err => {
-        console.log(err);
-      });
+    else {
+      dispatch(register(data.get('userName'), data.get('email'), data.get('password'))).then(
+        () => {
+          navigate('/verify');
+        }
+      )
+        .catch(err => {
+          console.log(err);
+        });
+    }
+
   };
 
   return (
@@ -148,7 +164,6 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
                 <TextField
-                  // autoComplete="given-name"
                   name="userName"
                   required
                   fullWidth
@@ -159,16 +174,6 @@ export default function SignUp() {
                   onChange={handleNameChange}
                 />
               </Grid>
-              {/* <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   required
@@ -192,7 +197,6 @@ export default function SignUp() {
                   id="password"
                   helperText={passErr}
                   error={passErr}
-                  // autoComplete="new-password"
                   onChange={handlePassChange}
                 />
               </Grid>
@@ -210,22 +214,17 @@ export default function SignUp() {
                   onChange={handleConfirmPassChange}
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="code"
-                  label="Confirm Code"
-                  type="number"
-                  id="number"
-                />
-              </Grid> */}
-              {/* <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid> */}
+              <Grid item xs={12}>
+                <Checkbox required onChange={handleCheck} /> Confirm&nbsp;
+                <NavLink to='/agreement'>
+                  Terms & Conditions agreement
+                </NavLink>
+                {checkedErr &&
+                  <Typography variant="body2" sx={{ color: 'red' }}>
+                    {checkedErr}
+                  </Typography>
+                }
+              </Grid>
             </Grid>
             <Button
               type="submit"

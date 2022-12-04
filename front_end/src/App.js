@@ -15,6 +15,7 @@ import Alter from './pages/alter.js';
 import Verify from './pages/verify';
 import Admin from './pages/admin';
 import PublicLists from './pages/publicLists';
+import Agreement from './pages/agreement';
 
 function App() {
   // const [loggedIn, setLoggedIn] = useState(false);
@@ -42,6 +43,7 @@ function App() {
         <Route path="/verify" element={<Verify/>}></Route>
         <Route path="/admin" element={<Admin/>}></Route>
         <Route path='/publiclists' element={<PublicLists/>}></Route>
+        <Route path='/agreement' element={<Agreement/>}></Route>
       </Routes>
     </div>
   );
