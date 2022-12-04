@@ -1,7 +1,9 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import {BASE_URL} from './setting.js';
 
-const API_URL = 'http://127.0.0.1:3009/api/admin/';
+// const API_URL = 'http://127.0.0.1:3009/api/admin/';
+const API_URL = BASE_URL + 'api/admin/';
 
 const getAllUsers = () => {
     return axios.get(API_URL + 'userNameLists', { headers: authHeader() })

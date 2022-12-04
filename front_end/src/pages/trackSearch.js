@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -16,7 +16,7 @@ import validator from 'validator';
 import { useDispatch, useSelector } from "react-redux";
 import { login } from '../actions/auth';
 import { alpha, styled } from '@mui/material/styles';
-import './index.css';
+import OpenService from '../services/open.service';
 
 const theme = createTheme({
     components: {
@@ -28,7 +28,20 @@ const theme = createTheme({
     }
 });
 
-export default function trackSearch() {
+export default function TrackSearch() {
+
+    const [artistName, setArtistName] = useState('');
+    const [trackTitle, setTrackTitle] = useState('');
+    const [genreTitle, setGenreTitle] = useState('');
+
+    const changeArtist = event => {setArtistName(event.currentTarget.value)};
+    const changeTrack = event => {setTrackTitle(event.currentTarget.value)};
+    const changeGenre = event => {setGenreTitle(event.currentTarget.value)};
+
+    const handleSubmit = () => {
+        OpenService.searchTracks(artistName, trackTitle, genreTitle);
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="lg" sx={{mt: 3}}>
@@ -43,7 +56,7 @@ export default function trackSearch() {
                     </Grid>
                     <Grid item xs={2}>
                         <TextField
-                            InputProps={{ sx: { height: 40 } }}
+                            onChange={changeArtist}
                         />
                     </Grid>
                     <Grid item xs={1.5}>
@@ -53,6 +66,7 @@ export default function trackSearch() {
                     </Grid>
                     <Grid item xs={2}>
                         <TextField
+                            onChange={changeTrack}
                         />
                     </Grid>
                     <Grid item xs={1.5}>
@@ -62,10 +76,13 @@ export default function trackSearch() {
                     </Grid>
                     <Grid item xs={2}>
                         <TextField
+                            onChange={changeGenre}
                         />
                     </Grid>
                     <Grid item xs={1.5}>
-                        <Button variant="contained">Search</Button>
+                        <Button variant="contained"
+                            onClick={handleSubmit}
+                        >Search</Button>
                     </Grid>
                 </Grid>
             </Container>

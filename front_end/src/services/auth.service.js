@@ -1,8 +1,9 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import {BASE_URL} from './setting';
 
-const API_URL = "http://127.0.0.1:3009/api/open/";
-// const API_URL = "http://172.20.10.2:3000/api/auth/";
+// const API_URL = "http://127.0.0.1:3009/api/open/";
+const API_URL = BASE_URL + 'api/open/';
 
 const register = (username, email, password) => {
   return axios.post(API_URL + "register", {
