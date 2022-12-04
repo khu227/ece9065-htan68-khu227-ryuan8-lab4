@@ -107,7 +107,7 @@ exports.getTrackByCombi = (req,res) =>{
 } 
 exports.tenPublicList = (req, res) => {
   
-    const sql = `select list_name,count(trackInList.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from ((raw_tracks join trackInList on trackInList.track_id=raw_tracks.track_id ) join play_list on play_list.list_id = trackInList.list_id and play_list.public = 1)group by list_name ORDER BY play_list.update_time limit 10 `    
+    const sql = `select play_list.user_name,list_name,rate,count(trackInList.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from (((raw_tracks join trackInList on trackInList.track_id=raw_tracks.track_id ) join play_list on play_list.list_id = trackInList.list_id and play_list.public = 1) left join review on play_list.list_id = review.list_id)  group by list_name ORDER BY play_list.update_time limit 10 `    
     //const sql = 'select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id)order by play_list.update_time, play_list.list_name'
         database.query(sql, (err, results) => {
             if (err) return res.send({ status: 401, message: err.message })
@@ -163,7 +163,7 @@ exports.tenPublicList = (req, res) => {
             const sql =`INSERT INTO play_list (list_name, public, update_time, description, user_name)VALUES ('${list_name}', '${visibility}','${datetime}','${description}','${name}');`
             database.query(sql,[req.body],(err,results) =>{
                 if (err) return res.send({ status: 1, message: 'Failed to add play list' })
-                res.send({ status: 1, message: 'The list was added successfully' })
+                res.send({ status: 200, message: 'The list was added successfully' })
                 const array = String(list_of_tracks).split(',')
                 const listnamesql = `select list_id from play_list where list_name = '${list_name}'`
                 let local_listid = 0
@@ -173,7 +173,7 @@ exports.tenPublicList = (req, res) => {
                      for(let i=0; i<array.length;i++){
                        let sqlin = `Insert into trackInList (list_id,track_id)VALUES('${local_listid}','${array[i].replace('"','')}')`
                        database.query(sqlin,(err,results) =>{
-                        if (err) return res.send({ status: 1, message: err.message })
+                        if (err) return res.send({ status: 401, message: err.message })
                        })
                     }  
                     
@@ -186,19 +186,33 @@ exports.tenPublicList = (req, res) => {
     }
         
     
-    // exports.userListInfo = (req, res) => {
-    //     const name = req.user.name
-    //     const sql = `select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id and paly_list.user_name = '${name}') join raw_tracks on trackInList.track_id = raw_tracks.track_id)order by play_list.update_time, play_list.list_name`
-    //     database.query(sql, (err, results) => {
-    //         if (err) return res.send({ status: 401, message: err.message })
-    //         res.send(results)
+    exports.userListInfo = (req, res) => {
+        
+        const name = req.user.name
+        console.log(name)
+
+        const empty_sql = `select user_name from play_list where user_name = '${name}'`
+        database.query(empty_sql, (err, resulta) => {
+        if(resulta.length===0){
+            res.send({ status: 401, message: 'error, please contact admin' })
+        }
+
+
+        const sql = `select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id and play_list.user_name = '${name}') join raw_tracks on trackInList.track_id = raw_tracks.track_id)order by play_list.update_time, play_list.list_name`
+        database.query(sql, (err, results) => {
+            if (err) return res.send({ status: 401, message: err.message })
+            if (results.length===0){
+                res.send({ status: 401, message: 'You don not have any play list, please create!' })
+            }
+            res.send(results)
     
-    //     })
+        })
+    })
     
-    
-    
-    
-    // }
+     }
+
+
+
     //4c user able to edit all aspects of an existing list
     exports.newPlayListAspects = (req, res) => {
         var currentdate = new Date(); 
@@ -242,7 +256,7 @@ exports.tenPublicList = (req, res) => {
                     })
     
               
-                    res.send({ status: 1, message: 'The list was edit successfully' })
+                    res.send({ status: 200, message: 'The list was edit successfully' })
             })
             
         })
@@ -283,7 +297,7 @@ exports.tenPublicList = (req, res) => {
     
                 })
     
-                res.send({ status: 1, message: 'the list have deleted sucessfully' })
+                res.send({ status: 200, message: 'the list have deleted sucessfully' })
         })
     
     
