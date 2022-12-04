@@ -117,8 +117,9 @@ exports.tenPublicList = (req, res) => {
     exports.tenPublicListMore = (req, res) => {
       const list_name = req.body.list_name
       const topsql = `select list_id from play_list where list_name = '${list_name}'`
+      //const topsql = `select list_id from play_list where list_name = ?`
       let local_listid = 0
-      database.query(topsql, (err, results) => {
+      database.query(topsql,[req.body.list_name],(err, results) => {
         local_listid = results[0].list_id
         //const sql = 'select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id) order by play_list.update_time, play_list.list_name'
         const sql = `select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON ${local_listid} = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id) order by play_list.update_time, play_list.list_name`
