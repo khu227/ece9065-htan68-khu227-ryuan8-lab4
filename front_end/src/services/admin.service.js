@@ -18,7 +18,25 @@ const setUserAsAdmin = name => {
         });
 };
 
+const setUserActive = name => {
+    return axios.post(API_URL + 'adminReactivation', {name}, { headers: authHeader() })
+    .then(response => {
+        console.log(response);
+        return response.data;
+    });
+};
+
+const setUserDeactivate = name => {
+    return axios.post(API_URL + 'adminDeactivation', {name}, { headers: authHeader() })
+    .then(response => {
+        console.log(response);
+        return response.data;
+    });
+};
+
 export default {
     getAllUsers,
-    setUserAsAdmin
+    setUserAsAdmin,
+    setUserActive,
+    setUserDeactivate
 }; 

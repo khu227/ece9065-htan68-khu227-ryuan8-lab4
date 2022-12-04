@@ -9,13 +9,13 @@ export const getAllUsers = (dispatch) => {
         .then(
             response => {
                 if (response.status == 200) {
-                    const arr = [];
-                    for (let i of response.data) {
-                        arr.push(i.name);
-                    }
+                    // const arr = [];
+                    // for (let i of response.data) {
+                    //     arr.push(i.name);
+                    // }
                     dispatch({
                         type: SET_NON_ADMIN_USERS,
-                        payload: arr
+                        payload: response.data
                     });
                     Promise.resolve();
                 }

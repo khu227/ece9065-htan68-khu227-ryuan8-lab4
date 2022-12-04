@@ -23,7 +23,7 @@ const pages = ['Track Searching', 'All Play-lists'];
 const settings = ['Alter Password', 'Logout'];
 const route = {
     'Track Searching': '/search',
-    'All Play-lists': '/lists',
+    'Public Play-lists': '/publiclists',
     'Administrator': '/admin'
 }
 

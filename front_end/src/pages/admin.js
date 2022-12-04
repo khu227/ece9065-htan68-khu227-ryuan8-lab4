@@ -40,15 +40,18 @@ export default function Admin() {
                         {
                             users.map(user => (
                                 <TableRow
-                                    key={user}
+                                    key={user.name}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
-                                    <TableCell align="left">{user}</TableCell>
+                                    <TableCell align="left">{user.name}</TableCell>
                                     <TableCell align="left">
-                                        <AdminButton user={user}></AdminButton>
+                                        <AdminButton user={user.name}></AdminButton>
                                     </TableCell>
                                     <TableCell align="left">
-                                        <ActivateButton activate={true}></ActivateButton>
+                                        <ActivateButton
+                                            activate={user.is_active}
+                                            user={user.name}
+                                        ></ActivateButton>
                                     </TableCell>
                                 </TableRow>
                             ))

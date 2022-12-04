@@ -14,6 +14,7 @@ import TrackSearch from './pages/trackSearch.js';
 import Alter from './pages/alter.js';
 import Verify from './pages/verify';
 import Admin from './pages/admin';
+import PublicLists from './pages/publicLists';
 
 function App() {
   // const [loggedIn, setLoggedIn] = useState(false);
@@ -40,6 +41,7 @@ function App() {
         <Route path="/alter" element={<Alter/>}></Route>
         <Route path="/verify" element={<Verify/>}></Route>
         <Route path="/admin" element={<Admin/>}></Route>
+        <Route path='/publiclists' element={<PublicLists/>}></Route>
       </Routes>
     </div>
   );
