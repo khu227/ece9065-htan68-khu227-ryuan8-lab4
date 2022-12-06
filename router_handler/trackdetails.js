@@ -107,8 +107,9 @@ exports.getTrackByCombi = (req,res) =>{
 } 
 exports.tenPublicList = (req, res) => {
   
-    const sql = `select play_list.user_name,list_name,rate,review,count(trackInList.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from (((raw_tracks join trackInList on trackInList.track_id=raw_tracks.track_id ) join play_list on play_list.list_id = trackInList.list_id and play_list.public = 1) left join review on play_list.list_id = review.list_id)  group by list_name ORDER BY play_list.update_time limit 10 `    
-    //const sql = 'select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id)order by play_list.update_time, play_list.list_name'
+    //const sql = `select play_list.user_name,list_name,rate,review,count(trackInList.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from (((raw_tracks join trackInList on trackInList.track_id=raw_tracks.track_id ) join play_list on play_list.list_id = trackInList.list_id and play_list.public = 1) left join review on play_list.list_id = review.list_id)  group by list_name ORDER BY play_list.update_time limit 10 `    
+    const sql = `select play_list.user_name,list_name,count(trackInList.list_id) as count ,sum(TIME_TO_SEC(track_duration))as total_time from ((raw_tracks join trackInList on trackInList.track_id=raw_tracks.track_id ) join play_list on play_list.list_id = trackInList.list_id and play_list.public = 1)   group by list_name ORDER BY play_list.update_time limit 10 `    
+
         database.query(sql, (err, results) => {
             if (err) return res.send({ status: 401, message: err.message })
             res.send(results)
@@ -123,13 +124,29 @@ exports.tenPublicList = (req, res) => {
         local_listid = results[0].list_id
         //const sql = 'select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id) order by play_list.update_time, play_list.list_name'
         const sql = `select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON ${local_listid} = trackInList.list_id ) join raw_tracks on trackInList.track_id = raw_tracks.track_id) order by play_list.update_time, play_list.list_name`
-  
+
         database.query(sql, (err, results) => {
                 if (err) return res.send({ status: 401, message: err.message })
                 res.send(results)
             })
         })
         }
+//display review info when display play_list
+    exports.reviewOnPlaylist = (req, res) => {
+        const list_name = req.body.list_name
+        const topsql = `select list_id from play_list where list_name = '${list_name}'`
+        database.query(topsql,[req.body.list_name],(err, results) => {
+            local_listid = results[0].list_id
+        const sql = `select review.review, review.rate,review.user_name,review.id from review where ${local_listid} = review.list_id and review.hidden = 0` 
+            database.query(sql, (err, results) => {
+                    if (err) return res.send({ status: 401, message: err.message })
+                    res.send(results)
+            })
+        })
+     }
+
+
+
     
     //L4-4a
     //create up 20 play-list for authorized user
@@ -199,8 +216,8 @@ exports.tenPublicList = (req, res) => {
         }
 
 
-        //const sql = `select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id and play_list.user_name = '${name}') join raw_tracks on trackInList.track_id = raw_tracks.track_id)order by play_list.update_time, play_list.list_name`
-        const sql = `select play_list.*,trackInList.*, raw_tracks.*,review.rate,review.review,review.update_time, play_list.update_time from ((( play_list join trackInList ON play_list.list_id = trackInList.list_id and play_list.user_name = '${name}') join raw_tracks on trackInList.track_id = raw_tracks.track_id)left join review on play_list.list_id = review.list_id)order by play_list.update_time, play_list.list_name`
+        const sql = `select play_list.*,trackInList.*, raw_tracks.*, play_list.update_time from (( play_list join trackInList ON play_list.list_id = trackInList.list_id and play_list.user_name = '${name}') join raw_tracks on trackInList.track_id = raw_tracks.track_id)order by play_list.update_time, play_list.list_name`
+        //const sql = `select play_list.*,trackInList.*, raw_tracks.*,review.rate,review.review,review.update_time, play_list.update_time from ((( play_list join trackInList ON play_list.list_id = trackInList.list_id and play_list.user_name = '${name}') join raw_tracks on trackInList.track_id = raw_tracks.track_id)left join review on play_list.list_id = review.list_id)order by play_list.update_time, play_list.list_name`
 
         database.query(sql, (err, results) => {
             if (err) return res.send({ status: 401, message: err.message })
@@ -305,3 +322,66 @@ exports.tenPublicList = (req, res) => {
     
     
     }
+
+
+
+    //7.1:disable the review by admin
+    exports.reviewInfoDisable = (req, res) => {
+        
+        const list_name = req.body.list_name
+        const review_id = req.body.id
+        const topsql = `select list_id from play_list where list_name = '${list_name}'`
+
+        database.query(topsql,[req.body.list_name],(err, results) => {
+            local_listid = results[0].list_id
+            const sql = `UPDATE review SET hidden = 1 WHERE id = ${review_id} and list_id = ${local_listid};`      
+            database.query(sql, (err, results) => {
+                if (err) return res.send({ status: 401, message: err.message })
+                res.send(results)
+        })
+            
+            
+            
+        })
+
+
+
+
+    }
+
+//7.2a view all disabled review info
+
+exports.viewAllDisableReview = (req, res) => {
+    const sql = 'select * from review where hidden = 1'
+    database.query(sql,(err, results) => {
+        if (err) return res.send({ status: 401, message: err.message })
+        if(results.length === 0) res.send({ status: 401, message: 'none of the review are disabled!' })
+        res.send(results)
+
+    })
+}
+
+
+
+
+    
+//7.2b:enable the review by admin   
+exports.reviewInfoRecover = (req, res) => {
+        
+    const list_name = req.body.list_name
+    const review_id = req.body.id
+    const topsql = `select list_id from play_list where list_name = '${list_name}'`
+    
+    database.query(topsql,[req.body.list_name],(err, results) => {
+        local_listid = results[0].list_id
+        const sql = `UPDATE review SET hidden = 0 WHERE id = ${review_id} and list_id = ${local_listid};`      
+        database.query(sql, (err, results) => {
+            if (err) return res.send({ status: 401, message: err.message })
+                res.send(results)
+        })
+                
+                
+                
+    })
+    
+}
