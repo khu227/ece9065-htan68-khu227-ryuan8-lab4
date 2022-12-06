@@ -53,9 +53,6 @@ function Header(props) {
             : [])
     ];
 
-
-    console.log('isAdmain:' + isAdmin);
-
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };

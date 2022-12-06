@@ -25,7 +25,31 @@ const getPublicLists = () => {
     );
 };
 
+const getPublicListsMore = name => {
+    return axios.post(API_URL + 'tenPublicListMore',{
+        list_name: name
+    })
+    .then(
+        response => {
+            return response.data;
+        }
+    );
+};
+
+const getListReviews = name => {
+    return axios.post(API_URL + 'reviewOnPlaylist', {
+        list_name: name
+    })
+    .then(
+        response => {
+            return response.data;
+        }
+    );
+};
+
 export default {
     searchTracks,
-    getPublicLists
+    getPublicLists,
+    getPublicListsMore,
+    getListReviews
 };

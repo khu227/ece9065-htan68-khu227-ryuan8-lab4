@@ -13,66 +13,67 @@ import OpenService from '../services/open.service.js';
 import Link from '@mui/material/Link';
 import { SET_LIST_NAME } from '../actions/types.js';
 import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import YoutubeButton from '../components/youtubeButton.js';
+import KeyboardReturnOutlinedIcon from '@mui/icons-material/KeyboardReturnOutlined';
+import Grid from '@mui/material/Grid';
+import Reviews from '../components/review';
 
+export default function ListDetails() {
 
-export default function PublicLists() {
-
-    const [publicLists, setPublicLists] = useState([]);
+    const [details, setDetails] = useState([]);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const openState = useSelector(state => state.openState);
+    const { listName } = openState;
 
-    useEffect(() => { OpenService.getPublicLists().then(res => { setPublicLists(res) }) }, []);
+    useEffect(() => { OpenService.getPublicListsMore(listName).then(res => { setDetails(res) }) }, []);
 
-    const handleClickList = name => {
-        console.log(name);
-        dispatch({
-            type: SET_LIST_NAME,
-            payload: name
-        });
-        navigate('/listdetails');
+    const handleClick = () => {
+        navigate(-1);
     };
 
     return (
-        <Container component="main" maxWidth="md" sx={{ mt: 3 }}>
+        <Container component="main" maxWidth="md" sx={{ mt: 3 , pb: 20}}>
             <Typography component="h4" variant="h4">
-                Public Lists
+                {listName}
             </Typography>
+            <Grid container sx={{ mt: 2 }}>
+                <Grid item sx={2}>
+                    <Button variant="outlined"
+                        onClick={handleClick}>
+                        <KeyboardReturnOutlinedIcon />return
+                    </Button>
+                </Grid>
+            </Grid>
             <TableContainer component={Paper} sx={{ mt: 3 }}>
                 <Table sx={{ minWidth: 400 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell align="left">Creator</TableCell>
-                            <TableCell align="left">Total Play-time</TableCell>
-                            <TableCell align="left">Numbers of tracks</TableCell>
+                            <TableCell>Track Title</TableCell>
+                            <TableCell align="left">Artist Name</TableCell>
+                            <TableCell align="left">Description</TableCell>
+                            <TableCell align="left">Play</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {
-                            publicLists.map(list => (
+                            details.map(detail => (
                                 <TableRow
-                                    key={list.list_name}
+                                    key={detail.track_id}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell align="left">
-                                        <Link
-                                            component="button"
-                                            variant="body2"
-                                            onClick={() =>
-                                                handleClickList(list.list_name)
-                                            }
-                                        >
-                                            {list.list_name}
-                                        </Link>
+                                        {detail.track_title}
                                     </TableCell>
                                     <TableCell align="left">
-                                        {list.user_name}
+                                        {detail.artist_name}
                                     </TableCell>
                                     <TableCell align="left">
-                                        {list.total_time}
+                                        {detail.description}
                                     </TableCell>
                                     <TableCell align="left">
-                                        {list.count}
+                                        <YoutubeButton trackTitle={detail.track_title} />
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -80,6 +81,7 @@ export default function PublicLists() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Reviews/>
         </Container>
     )
 };

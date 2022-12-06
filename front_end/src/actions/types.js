@@ -11,3 +11,5 @@ export const SET_FAIL_MESSAGE = "SET_FAIL_MESSAGE";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 
 export const SET_NON_ADMIN_USERS = "SET_NON_ADMIN_USERS";
+
+export const SET_LIST_NAME = "SET_LIST_NAME";

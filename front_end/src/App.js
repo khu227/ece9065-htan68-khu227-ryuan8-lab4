@@ -16,6 +16,7 @@ import Verify from './pages/verify';
 import Admin from './pages/admin';
 import PublicLists from './pages/publicLists';
 import Agreement from './pages/agreement';
+import ListDetails from './pages/listDetails';
 
 function App() {
   // const [loggedIn, setLoggedIn] = useState(false);
@@ -44,6 +45,7 @@ function App() {
         <Route path="/admin" element={<Admin/>}></Route>
         <Route path='/publiclists' element={<PublicLists/>}></Route>
         <Route path='/agreement' element={<Agreement/>}></Route>
+        <Route path='/listdetails' element={<ListDetails/>}></Route>
       </Routes>
     </div>
   );
