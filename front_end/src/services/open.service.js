@@ -11,7 +11,7 @@ const searchTracks = (artistName, trackTitle, trackGenre) => {
     })
     .then(
         response => {
-            console.log(response);
+            return response.data;
         }
     );
 };
