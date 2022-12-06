@@ -131,16 +131,13 @@ exports.tenPublicList = (req, res) => {
             })
         })
         }
-
+//display review info when display play_list
     exports.reviewOnPlaylist = (req, res) => {
         const list_name = req.body.list_name
         const topsql = `select list_id from play_list where list_name = '${list_name}'`
         database.query(topsql,[req.body.list_name],(err, results) => {
             local_listid = results[0].list_id
-
-
-        const sql = `select review.review, review.rate from review where ${local_listid} = review.list_id and review.hidden = 0`    
-        
+        const sql = `select review.review, review.rate,review.user_name from review where ${local_listid} = review.list_id and review.hidden = 0` 
             database.query(sql, (err, results) => {
                     if (err) return res.send({ status: 401, message: err.message })
                     res.send(results)
