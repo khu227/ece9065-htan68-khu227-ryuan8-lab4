@@ -137,7 +137,7 @@ exports.tenPublicList = (req, res) => {
         const topsql = `select list_id from play_list where list_name = '${list_name}'`
         database.query(topsql,[req.body.list_name],(err, results) => {
             local_listid = results[0].list_id
-        const sql = `select review.review, review.rate,review.user_name from review where ${local_listid} = review.list_id and review.hidden = 0` 
+        const sql = `select review.review, review.rate,review.user_name,review.id from review where ${local_listid} = review.list_id and review.hidden = 0` 
             database.query(sql, (err, results) => {
                     if (err) return res.send({ status: 401, message: err.message })
                     res.send(results)
@@ -322,3 +322,66 @@ exports.tenPublicList = (req, res) => {
     
     
     }
+
+
+
+    //7.1:disable the review by admin
+    exports.reviewInfoDisable = (req, res) => {
+        
+        const list_name = req.body.list_name
+        const review_id = req.body.id
+        const topsql = `select list_id from play_list where list_name = '${list_name}'`
+
+        database.query(topsql,[req.body.list_name],(err, results) => {
+            local_listid = results[0].list_id
+            const sql = `UPDATE review SET hidden = 1 WHERE id = ${review_id} and list_id = ${local_listid};`      
+            database.query(sql, (err, results) => {
+                if (err) return res.send({ status: 401, message: err.message })
+                res.send(results)
+        })
+            
+            
+            
+        })
+
+
+
+
+    }
+
+//7.2a view all disabled review info
+
+exports.viewAllDisableReview = (req, res) => {
+    const sql = 'select * from review where hidden = 1'
+    database.query(sql,(err, results) => {
+        if (err) return res.send({ status: 401, message: err.message })
+        if(results.length === 0) res.send({ status: 401, message: 'none of the review are disabled!' })
+        res.send(results)
+
+    })
+}
+
+
+
+
+    
+//7.2b:enable the review by admin   
+exports.reviewInfoRecover = (req, res) => {
+        
+    const list_name = req.body.list_name
+    const review_id = req.body.id
+    const topsql = `select list_id from play_list where list_name = '${list_name}'`
+    
+    database.query(topsql,[req.body.list_name],(err, results) => {
+        local_listid = results[0].list_id
+        const sql = `UPDATE review SET hidden = 0 WHERE id = ${review_id} and list_id = ${local_listid};`      
+        database.query(sql, (err, results) => {
+            if (err) return res.send({ status: 401, message: err.message })
+                res.send(results)
+        })
+                
+                
+                
+    })
+    
+}

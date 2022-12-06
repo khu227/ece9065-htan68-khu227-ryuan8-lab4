@@ -21,6 +21,11 @@ router.post('/api/secure/userNewList', trackdetails_handler.userNewList);
 router.get('/api/secure/userListInfo', trackdetails_handler.userListInfo);
 router.post('/api/secure/newPlayListAspects', trackdetails_handler.newPlayListAspects);
 router.post('/api/secure/delExitList', trackdetails_handler.delExitList);
+
+//7 admin disable and enable display playlist review info
+router.post('/api/admin/reviewInfoDisable',trackdetails_handler.reviewInfoDisable)
+router.get('/api/admin/viewAllDisableReview',trackdetails_handler.viewAllDisableReview)
+router.post('/api/admin/reviewInfoRecover',trackdetails_handler.reviewInfoRecover)
 module.exports = router;
 
 
