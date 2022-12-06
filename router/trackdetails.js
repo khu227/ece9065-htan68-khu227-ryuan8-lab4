@@ -14,7 +14,7 @@ router.get('/musicdatas/:track_title:artist_name:album_title', trackdetails_hand
 router.post('/api/open/trackDetailsBycombi',trackdetails_handler.getTrackByCombi)
 router.get('/api/open/tenPublicList', trackdetails_handler.tenPublicList);//get list info
 router.post('/api/open/tenPublicListMore', trackdetails_handler.tenPublicListMore);//allow user to get more track detail saved in list.
-
+router.post('/api/open/reviewOnPlaylist', trackdetails_handler.reviewOnPlaylist);
 
 //lab4-4 authenticated user
 router.post('/api/secure/userNewList', trackdetails_handler.userNewList);
