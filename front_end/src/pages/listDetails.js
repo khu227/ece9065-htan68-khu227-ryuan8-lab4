@@ -18,6 +18,7 @@ import YoutubeButton from '../components/youtubeButton.js';
 import KeyboardReturnOutlinedIcon from '@mui/icons-material/KeyboardReturnOutlined';
 import Grid from '@mui/material/Grid';
 import Reviews from '../components/review';
+import Box from '@mui/material/Box';
 
 export default function ListDetails() {
 
@@ -34,7 +35,7 @@ export default function ListDetails() {
     };
 
     return (
-        <Container component="main" maxWidth="md" sx={{ mt: 3 , pb: 20}}>
+        <Container component="main" maxWidth="md" sx={{ mt: 3, pb: 20 }}>
             <Typography component="h4" variant="h4">
                 {listName}
             </Typography>
@@ -46,13 +47,15 @@ export default function ListDetails() {
                     </Button>
                 </Grid>
             </Grid>
+            <Box sx={{ mt:2 }}>
+                Description: {details && details[0] && details[0].description}
+            </Box>
             <TableContainer component={Paper} sx={{ mt: 3 }}>
                 <Table sx={{ minWidth: 400 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell>Track Title</TableCell>
                             <TableCell align="left">Artist Name</TableCell>
-                            <TableCell align="left">Description</TableCell>
                             <TableCell align="left">Play</TableCell>
                         </TableRow>
                     </TableHead>
@@ -70,9 +73,6 @@ export default function ListDetails() {
                                         {detail.artist_name}
                                     </TableCell>
                                     <TableCell align="left">
-                                        {detail.description}
-                                    </TableCell>
-                                    <TableCell align="left">
                                         <YoutubeButton trackTitle={detail.track_title} />
                                     </TableCell>
                                 </TableRow>
@@ -81,7 +81,7 @@ export default function ListDetails() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Reviews/>
+            <Reviews />
         </Container>
     )
 };
