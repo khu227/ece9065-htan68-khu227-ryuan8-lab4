@@ -24,7 +24,8 @@ const settings = ['Alter Password', 'Logout'];
 const route = {
     'Track Searching': '/search',
     'Public Play-lists': '/publiclists',
-    'Administrator': '/admin'
+    'Administrator': '/admin',
+    'Manage Play-lists': '/managelists'
 }
 
 // reference: https://mui.com/material-ui/react-app-bar/

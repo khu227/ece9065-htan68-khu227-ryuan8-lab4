@@ -36,9 +36,33 @@ const setUserDeactivate = name => {
     });
 };
 
+const setReviewDisable = (name, id) => {
+    return axios.post(API_URL + 'reviewInfoDisable', {
+        list_name: name,
+        id: id
+    }, {headers: authHeader()})
+    .then(response => {
+        console.log(response);
+        return response;
+    });
+};
+
+const setReviewRecover = (name, id) => {
+    return axios.post(API_URL + 'reviewInfoRecover', {
+        list_name: name,
+        id: id
+    }, {headers: authHeader()})
+    .then(response => {
+        console.log(response);
+        return response;
+    });
+};
+
 export default {
     getAllUsers,
     setUserAsAdmin,
     setUserActive,
-    setUserDeactivate
+    setUserDeactivate,
+    setReviewDisable,
+    setReviewRecover
 }; 

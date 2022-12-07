@@ -35,6 +35,7 @@ export default function ListDetails() {
     };
 
     return (
+        details &&
         <Container component="main" maxWidth="md" sx={{ mt: 3, pb: 20 }}>
             <Typography component="h4" variant="h4">
                 {listName}

@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import Container from '@mui/material/Container';
@@ -7,38 +6,29 @@ import TableContainer from '@mui/material/TableContainer';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-// import { useDispatch, useSelector } from "react-redux";
-import OpenService from '../services/open.service.js';
 import Link from '@mui/material/Link';
-// import { SET_LIST_NAME } from '../actions/types.js';
-// import { useNavigate } from 'react-router-dom';
-import PlayLists from '../components/playLists.js';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import Paper from '@mui/material/Paper';
+import { SET_LIST_NAME } from '../actions/types.js';
 
-export default function PublicLists() {
+export default function PlayLists(props) {
 
-    const [publicLists, setPublicLists] = useState([]);
-    // const dispatch = useDispatch();
-    // const navigate = useNavigate();
+    const lists = props.lists;
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    useEffect(() => { OpenService.getPublicLists().then(res => { setPublicLists(res) }) }, []);
-
-    // const handleClickList = name => {
-    //     console.log(name);
-    //     dispatch({
-    //         type: SET_LIST_NAME,
-    //         payload: name
-    //     });
-    //     navigate('/listdetails');
-    // };
+    const handleClickList = name => {
+        console.log(name);
+        dispatch({
+            type: SET_LIST_NAME,
+            payload: name
+        });
+        navigate('/listdetails');
+    };
 
     return (
-        <Container component="main" maxWidth="md" sx={{ mt: 3 }}>
-            <Typography component="h4" variant="h4">
-                Public Lists
-            </Typography>
-            <PlayLists lists={publicLists}/>
-            {/* <TableContainer component={Paper} sx={{ mt: 3 }}>
+        <TableContainer component={Paper} sx={{ mt: 3 }}>
                 <Table sx={{ minWidth: 400 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
@@ -50,7 +40,7 @@ export default function PublicLists() {
                     </TableHead>
                     <TableBody>
                         {
-                            publicLists.map(list => (
+                            lists.map(list => (
                                 <TableRow
                                     key={list.list_name}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -80,7 +70,6 @@ export default function PublicLists() {
                         }
                     </TableBody>
                 </Table>
-            </TableContainer> */}
-        </Container>
-    )
+            </TableContainer>
+    );
 };
