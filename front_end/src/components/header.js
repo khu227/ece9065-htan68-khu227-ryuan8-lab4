@@ -14,22 +14,45 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 import {
-    NavLink
+    NavLink, useNavigate
 } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from '../actions/auth.js';
 
-const pages = ['Track Searching', 'All Play-lists', 'Administrator'];
+const pages = ['Track Searching', 'All Play-lists'];
 const settings = ['Alter Password', 'Logout'];
 const route = {
     'Track Searching': '/search',
-    'All Play-lists': '/lists',
-    'Administrator': '/admin'
+    'Public Play-lists': '/publiclists',
+    'Administrator': '/admin',
+    'Manage Play-lists': '/managelists'
 }
 
 // reference: https://mui.com/material-ui/react-app-bar/
 
-function Header() {
+function Header(props) {
+    const userState = props.auth;
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { isAdmin, isLoggedIn } = userState;
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+    const auth = useSelector(state => state.auth);
+
+    // isAdmin && pages.push('Administrator');
+
+    const pages = [
+        'Track Searching', 'Public Play-lists',
+        ...(
+            isLoggedIn ?
+            ['Manage Play-lists']
+            : []
+        ),
+        ...(isAdmin ?
+            ['Administrator']
+            : [])
+    ];
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -43,7 +66,18 @@ function Header() {
     };
 
     const handleCloseUserMenu = () => {
+        // console.log(setting);
         setAnchorElUser(null);
+    };
+
+    const handleAlter = () => {
+        navigate('/alter');
+    };
+
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate('/');
+        window.location.reload();
     };
 
     return (
@@ -136,37 +170,48 @@ function Header() {
                             </Button>
                         ))}
                     </Box>
-
-                    <Box sx={{ flexGrow: 0 }}>
-                        {/* <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Todd" src="/static/images/avatar/2.jpg" />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                    {isLoggedIn ?
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Open settings">
+                                <Button
+                                    variant="text"
+                                    onClick={handleOpenUserMenu} sx={{ p: 0, color: 'white' }}>
+                                    <Typography textAlign="center">{
+                                        auth &&
+                                        auth.userInfo &&
+                                        auth.userInfo.user &&
+                                        auth.userInfo.user.name
+                                    }</Typography>
+                                </Button>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                <MenuItem onClick={handleAlter}>
+                                    <Typography textAlign="center">Alter Password</Typography>
                                 </MenuItem>
-                            ))}
-                        </Menu> */}
-                        <Button variant='text' href='/signin' sx={{color:'white'}}>Sign in</Button>
-                    </Box>
+                                <MenuItem onClick={handleLogout}>
+                                    <Typography textAlign="center">Logout</Typography>
+                                </MenuItem>
+                            </Menu>
+                        </Box>
+                        : <Box sx={{ flexGrow: 0 }}>
+                            <Button variant='text' href='/signin' sx={{ color: 'white' }}>Sign in</Button>
+                        </Box>
+                    }
                 </Toolbar>
             </Container>
         </AppBar>

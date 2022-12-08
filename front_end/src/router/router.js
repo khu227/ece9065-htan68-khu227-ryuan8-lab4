@@ -4,27 +4,29 @@ import {
 import Home from '../pages/home.js';
 import SignIn from '../pages/signin.js';
 import SignUp from '../pages/signup.js';
+import TrackSearch from '../pages/trackSearch.js';
+import Alter from '../pages/alter.js';
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <Home/>
     },
-    // {
-    //     path: '/home',
-    //     element: <Home/>
-    // },
     {
-        path: 'signin',
+        path: '/signin',
         element: <SignIn/>
     },
     {
-        path: 'signup',
+        path: '/signup',
         element: <SignUp/>
     },
     {
         path: '/search',
-        element: <h1>search</h1>
+        element: <TrackSearch/>
+    },
+    {
+        path: '/alter',
+        element: <Alter/>
     }
 ]);
 

@@ -11,7 +11,6 @@ function Home() {
                 Maybe the best music community
             </Typography>
         </div>
-
     );
 }
 

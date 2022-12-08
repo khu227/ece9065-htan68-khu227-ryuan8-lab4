@@ -1,0 +1,15 @@
+export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
+export const REGISTER_FAIL = "REGISTER_FAIL";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_FAIL = "LOGIN_FAIL";
+export const LOGOUT = "LOGOUT";
+
+// export const TOURIST = "TOURIST";
+
+export const SET_SUCCESS_MESSAGE = "SET_SUCCESS_MESSAGE";
+export const SET_FAIL_MESSAGE = "SET_FAIL_MESSAGE";
+export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
+
+export const SET_NON_ADMIN_USERS = "SET_NON_ADMIN_USERS";
+
+export const SET_LIST_NAME = "SET_LIST_NAME";
