@@ -112,6 +112,9 @@ exports.tenPublicList = (req, res) => {
 
         database.query(sql, (err, results) => {
             if (err) return res.send({ status: 401, message: err.message })
+            if(results.length===0){
+                return res.send({ status: 401, message: 'empty public list, please contact admin to add it!' })
+            }
             res.send(results)
         })
     }
