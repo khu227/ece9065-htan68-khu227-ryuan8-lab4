@@ -14,7 +14,8 @@ export default function Reviews() {
     const [reviews, setReviews] = useState([]);
     const openState = useSelector(state => state.openState);
     const auth = useSelector(state => state.auth);
-    const isLoggedIn = auth.isLoggedIn;
+    // const isLoggedIn = auth.isLoggedIn;
+    const isAdmin = auth.userInfo && auth.userInfo.user && auth.userInfo.user.is_admin;
     const { listName } = openState;
 
     useEffect(() => { openService.getListReviews(listName).then(res => { setReviews(res) }) }, []);
@@ -29,7 +30,7 @@ export default function Reviews() {
         window.location.reload();
     };
 
-    return reviews.map(review => ((!review.hidden || isLoggedIn) ?
+    return reviews.map(review => ((!review.hidden || isAdmin) ?
         <Container sx={{ mt: 2 }}>
             <Divider textAlign="left">{review.user_name}</Divider>
             <Box align='left' sx={{ mt: 1 }}>
@@ -42,7 +43,7 @@ export default function Reviews() {
                     review: {review.review}
                 </Typography>
             </Box>
-            {isLoggedIn ? review.hidden ?
+            {isAdmin ? review.hidden ?
                 <Box align='left' sx={{ mt: 1 }} >
                     <Button variant="contained" color="success"
                         size='small'
