@@ -46,10 +46,10 @@ export default function ManageLists() {
                         horizontal: 'left',
                     }}
                 >
-                    <CreateORALterList isCreate={true}/>
+                    <CreateORALterList isCreate={true} />
                 </Popover>
             </Box>
-            <PlayLists lists={manageLists} isManage={true}/>
+            <PlayLists lists={manageLists} isManage={true} />
         </Container>
     )
 };

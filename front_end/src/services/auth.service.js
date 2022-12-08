@@ -54,7 +54,7 @@ const getAllUserLists = () => {
       if (response.data.status == 401)
         return [];
       else
-        return response;
+        return response.data;
     });
 };
 

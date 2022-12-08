@@ -17,12 +17,11 @@ import Popover from '@mui/material/Popover';
 
 export default function PlayLists(props) {
 
-    const lists = props.lists;
+    const lists = props.lists || [];
     const isManage = props.isManage || false;
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = React.useState(null);
-
     const handleClickList = name => {
         dispatch({
             type: SET_LIST_NAME,

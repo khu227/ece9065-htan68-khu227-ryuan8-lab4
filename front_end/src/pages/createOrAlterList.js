@@ -45,7 +45,7 @@ export default function CreateORALterList(props) {
     }
     if (isCreate) {
       AuthService.createList(listName, description, trackList, visibility);
-      window.location.reload();
+      // window.location.reload();
     }
     else {
       AuthService.alterList(listId, listName, description, trackList, visibility);
