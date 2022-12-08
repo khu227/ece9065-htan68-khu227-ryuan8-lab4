@@ -154,6 +154,7 @@ exports.tenPublicList = (req, res) => {
     //L4-4a
     //create up 20 play-list for authorized user
     exports.userNewList = (req, res) => {
+        let returnMessage = "success added!"
         var currentdate = new Date(); 
         var datetime = currentdate.getFullYear() + "-"
                         + (currentdate.getMonth()+1)  + "-" 
@@ -184,26 +185,43 @@ exports.tenPublicList = (req, res) => {
             const sql =`INSERT INTO play_list (list_name, public, update_time, description, user_name)VALUES ('${list_name}', '${visibility}','${datetime}','${description}','${name}');`
             database.query(sql,[req.body],(err,results) =>{
                 if (err) return res.send({ status: 1, message: 'Failed to add play list' })
-                res.send({ status: 200, message: 'The list was added successfully' })
+                
                 const array = String(list_of_tracks).split(',')
                 const listnamesql = `select list_id from play_list where list_name = '${list_name}'`
                 let local_listid = 0
                 database.query(listnamesql,(err,results) =>{    //take a list of track id and save it in created play list
                     if (err) return res.send({ status: 1, message: err.message })
                      local_listid = results[0].list_id  
+                     
                      for(let i=0; i<array.length;i++){
-                       let sqlin = `Insert into trackInList (list_id,track_id)VALUES('${local_listid}','${array[i].replace('"','')}')`
-                       database.query(sqlin,(err,results) =>{
-                        if (err) return res.send({ status: 401, message: err.message })
-                       })
+                        let sqltrackidinraw = `select track_id from raw_tracks where track_id = '${array[i].replace('"','')}'`
+                        database.query(sqltrackidinraw,(err,results) =>{
+                            let sqlin = `Insert into trackInList (list_id,track_id)VALUES('${local_listid}','${array[i].replace('"','')}')`
+                            
+                            if (err) return res.send({ status: 401, message: err.message })  
+                            if(results.length===0){
+                                sqlin = `select list_id from play_list`
+                                //returnMessage = "sorry, one of the track_id is not exist, please try again"
+                                
+                            }
+                            
+                            database.query(sqlin,(err,results) =>{
+                                if (err) return res.send({ status: 401, message: err.message })
+                             })
+                            })
                     }  
+                    
                     
                 })
                 
             })
+            
         })
+        
             }
+            res.send(returnMessage)
         })
+        
     }
         
     
@@ -388,3 +406,4 @@ exports.reviewInfoRecover = (req, res) => {
     })
     
 }
+
