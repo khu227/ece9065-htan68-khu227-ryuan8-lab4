@@ -1,30 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import TableContainer from '@mui/material/TableContainer';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 // import { useDispatch, useSelector } from "react-redux";
-import OpenService from '../services/open.service.js';
 import Link from '@mui/material/Link';
 import PlayLists from '../components/playLists.js';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import CreateORALterList from './createOrAlterList.js';
+import Popover from '@mui/material/Popover';
+import AuthService from '../services/auth.service.js';
 
-export default function PublicLists() {
+export default function ManageLists() {
 
-    const [publicLists, setPublicLists] = useState([]);
+    const [manageLists, setManageLists] = useState([]);
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
-    useEffect(() => { OpenService.getPublicLists().then(res => { setPublicLists(res) }) }, []);
+    useEffect(() => { AuthService.getAllUserLists().then(res => { setManageLists(res) }) }, []);
+
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
 
     return (
         <Container component="main" maxWidth="md" sx={{ mt: 3 }}>
             <Typography component="h4" variant="h4">
                 Manage Lists
             </Typography>
-            <PlayLists lists={publicLists}/>
+            <Box align='right'>
+                <Button variant="contained" onClick={handleClick}>
+                    Create List
+                </Button>
+                <Popover
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                >
+                    <CreateORALterList isCreate={true}/>
+                </Popover>
+            </Box>
+            <PlayLists lists={manageLists} isManage={true}/>
         </Container>
     )
 };

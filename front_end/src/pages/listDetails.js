@@ -19,6 +19,7 @@ import KeyboardReturnOutlinedIcon from '@mui/icons-material/KeyboardReturnOutlin
 import Grid from '@mui/material/Grid';
 import Reviews from '../components/review';
 import Box from '@mui/material/Box';
+import AddReview from '../components/addReview';
 
 export default function ListDetails() {
 
@@ -83,6 +84,7 @@ export default function ListDetails() {
                 </Table>
             </TableContainer>
             <Reviews />
+            <AddReview />
         </Container>
     )
 };

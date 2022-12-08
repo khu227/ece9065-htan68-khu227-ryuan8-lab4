@@ -18,6 +18,7 @@ import PublicLists from './pages/publicLists';
 import Agreement from './pages/agreement';
 import ListDetails from './pages/listDetails';
 import ManageLists from './pages/manageLists';
+import CreateORALterList from './pages/createOrAlterList';
 
 function App() {
   // const [loggedIn, setLoggedIn] = useState(false);
@@ -48,6 +49,7 @@ function App() {
         <Route path='/agreement' element={<Agreement/>}></Route>
         <Route path='/listdetails' element={<ListDetails/>}></Route>
         <Route path='/managelists' element={<ManageLists/>}></Route>
+        <Route path='/createoralterlist' element={<CreateORALterList/>}></Route>
       </Routes>
     </div>
   );

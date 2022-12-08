@@ -38,7 +38,7 @@ const logout = () => {
 const alterPass = password => {
   return axios({
     method: 'post',
-    url: 'http://127.0.0.1:3009/api/secure/update',
+    url: BASE_URL + 'api/secure/update',
     headers: authHeader(),
     data: { newpassword: password }
   })
@@ -47,9 +47,78 @@ const alterPass = password => {
     });
 };
 
+const getAllUserLists = () => {
+  return axios.get(BASE_URL + 'api/secure/userListInfo',
+    { headers: authHeader() })
+    .then(response => {
+      if (response.data.status == 401)
+        return [];
+      else
+        return response;
+    });
+};
+
+const createList = (name, description, tracks, visibility) => {
+  return axios.post(BASE_URL + 'api/secure/userNewList',
+    {
+      list_name: name,
+      description: description,
+      list_of_tracks: tracks,
+      visibility: visibility
+    },
+    { headers: authHeader() })
+    .then(response => {
+      return response.data;
+    });
+};
+
+const delteList = name => {
+  return axios.post(BASE_URL + 'api/secure/delExitList',
+    {
+      list_name: name
+    },
+    { headers: authHeader() })
+    .then(response => {
+      return response;
+    });
+}
+
+const alterList = (id, name, description, tracks, visibility) => {
+  return axios.post(BASE_URL + 'api/secure/newPlayListAspects',
+    {
+      list_name: name,
+      description: description,
+      list_of_tracks: tracks,
+      visibility: visibility,
+      list_id: id
+    },
+    { headers: authHeader() })
+    .then(response => {
+      return response.data;
+    });
+};
+
+const addReview = (id, rate, review) => {
+  return axios.post(BASE_URL + 'api/secure/review',
+  {
+    list_id: id,
+    review: review,
+    rate: rate
+  },
+  {headers: authHeader()})
+  .then(response => {
+    return response.data;
+  });
+};
+
 export default {
   register,
   login,
   logout,
-  alterPass
+  alterPass,
+  getAllUserLists,
+  createList,
+  delteList,
+  alterList,
+  addReview
 };
