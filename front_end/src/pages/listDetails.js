@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import OpenService from '../services/open.service.js';
 import Link from '@mui/material/Link';
 import { SET_LIST_NAME } from '../actions/types.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,  useParams} from 'react-router-dom';
 import Button from '@mui/material/Button';
 import YoutubeButton from '../components/youtubeButton.js';
 import KeyboardReturnOutlinedIcon from '@mui/icons-material/KeyboardReturnOutlined';
@@ -24,11 +24,13 @@ import AddReview from '../components/addReview';
 export default function ListDetails() {
 
     const [details, setDetails] = useState([]);
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const navigate = useNavigate();
     const openState = useSelector(state => state.openState);
+    const auth = useSelector(state => state.auth);
+    const isLoggedIn = auth.isLoggedIn;
     const { listName } = openState;
-
+    // const {listname} = useParams();
     useEffect(() => { OpenService.getPublicListsMore(listName).then(res => { setDetails(res) }) }, []);
 
     const handleClick = () => {
@@ -84,7 +86,9 @@ export default function ListDetails() {
                 </Table>
             </TableContainer>
             <Reviews />
-            <AddReview />
+            {isLoggedIn &&
+                <AddReview />
+            }
         </Container>
     )
 };

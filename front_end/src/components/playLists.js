@@ -13,7 +13,7 @@ import { SET_LIST_NAME } from '../actions/types.js';
 import Button from '@mui/material/Button';
 import AuthService from '../services/auth.service.js';
 import CreateORALterList from '../pages/createOrAlterList.js';
-import Popover from '@mui/material/Popover';
+import Grid from '@mui/material/Grid';
 
 export default function PlayLists(props) {
 
@@ -27,7 +27,7 @@ export default function PlayLists(props) {
             type: SET_LIST_NAME,
             payload: name
         });
-        navigate('/listdetails');
+        navigate('/listdetails/' + name);
     };
 
     const handleDelete = name => {
@@ -35,15 +35,15 @@ export default function PlayLists(props) {
         window.location.reload();
     };
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    // const handleClick = (event) => {
+    //     setAnchorEl(event.currentTarget);
+    // };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    // const handleClose = () => {
+    //     setAnchorEl(null);
+    // };
 
-    const open = Boolean(anchorEl);
+    // const open = Boolean(anchorEl);
 
     return (
         <TableContainer component={Paper} sx={{ mt: 3 }}>
@@ -51,9 +51,10 @@ export default function PlayLists(props) {
                 <TableHead>
                     <TableRow>
                         <TableCell>Name</TableCell>
-                        <TableCell align="left">Creator</TableCell>
+                        {!isManage && <TableCell align="left">Creator</TableCell>}
                         <TableCell align="left">Total Play-time</TableCell>
                         <TableCell align="left">Numbers of tracks</TableCell>
+                        {isManage && <TableCell align="left">Visibility</TableCell>}
                         {isManage && <TableCell align="left">Operation</TableCell>}
                     </TableRow>
                 </TableHead>
@@ -75,9 +76,11 @@ export default function PlayLists(props) {
                                         {list.list_name}
                                     </Link>
                                 </TableCell>
-                                <TableCell align="left">
-                                    {list.user_name}
-                                </TableCell>
+                                {!isManage &&
+                                    <TableCell align="left">
+                                        {list.user_name}
+                                    </TableCell>
+                                }
                                 <TableCell align="left">
                                     {list.total_time}
                                 </TableCell>
@@ -87,7 +90,14 @@ export default function PlayLists(props) {
                                 {
                                     isManage &&
                                     <TableCell align="left">
-                                        <Button
+                                        {list.public ? 'Public' : 'Private'}
+                                    </TableCell>
+                                }
+                                {
+                                    isManage &&
+
+                                    <TableCell align="left">
+                                        {/* <Button
                                             variant="contained"
                                             color="success"
                                             size='small'
@@ -103,19 +113,25 @@ export default function PlayLists(props) {
                                                     horizontal: 'left',
                                                 }}
                                             >
-                                                <CreateORALterList isCreate={false} list={list}/>
+                                                <CreateORALterList isCreate={false} list={list} />
                                             </Popover>
                                             Edit
-                                        </Button>
-                                        <Button
-                                            variant="contained"
-                                            color="error"
-                                            size='small'
-                                            onClick={handleDelete(list.list_name)}
-                                        >
-                                            Delete
-                                        </Button>
-
+                                        </Button> */}
+                                        <Grid container>
+                                            <Grid item>
+                                                <CreateORALterList isCreate={false} list={list} />
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    variant="contained"
+                                                    color="error"
+                                                    size='small'
+                                                    onClick={() => handleDelete(list.list_name)}
+                                                >
+                                                    Delete
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
                                     </TableCell>
                                 }
                             </TableRow>

@@ -47,7 +47,7 @@ function App() {
         <Route path="/admin" element={<Admin/>}></Route>
         <Route path='/publiclists' element={<PublicLists/>}></Route>
         <Route path='/agreement' element={<Agreement/>}></Route>
-        <Route path='/listdetails' element={<ListDetails/>}></Route>
+        <Route path='/listdetails/:listname' element={<ListDetails/>}></Route>
         <Route path='/managelists' element={<ManageLists/>}></Route>
         <Route path='/createoralterlist' element={<CreateORALterList/>}></Route>
       </Routes>

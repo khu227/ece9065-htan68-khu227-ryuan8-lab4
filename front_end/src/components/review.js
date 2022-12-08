@@ -13,6 +13,8 @@ export default function Reviews() {
 
     const [reviews, setReviews] = useState([]);
     const openState = useSelector(state => state.openState);
+    const auth = useSelector(state => state.auth);
+    const isLoggedIn = auth.isLoggedIn;
     const { listName } = openState;
 
     useEffect(() => { openService.getListReviews(listName).then(res => { setReviews(res) }) }, []);
@@ -38,7 +40,7 @@ export default function Reviews() {
                     review: {review.review}
                 </Typography>
             </Box>
-            {review.hidden ?
+            {isLoggedIn ? review.hidden ?
                 <Box align='left' sx={{ mt: 1 }} >
                     <Button variant="contained" color="success"
                         size='small'
@@ -54,6 +56,7 @@ export default function Reviews() {
                         Hide
                     </Button>
                 </Box>
+                : ''
             }
         </Container>
     ));
