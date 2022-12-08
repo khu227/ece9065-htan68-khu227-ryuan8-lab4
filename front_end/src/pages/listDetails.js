@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import OpenService from '../services/open.service.js';
 import Link from '@mui/material/Link';
 import { SET_LIST_NAME } from '../actions/types.js';
-import { useNavigate,  useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import YoutubeButton from '../components/youtubeButton.js';
 import KeyboardReturnOutlinedIcon from '@mui/icons-material/KeyboardReturnOutlined';
@@ -51,7 +51,7 @@ export default function ListDetails() {
                     </Button>
                 </Grid>
             </Grid>
-            <Box sx={{ mt:2 }}>
+            <Box sx={{ mt: 2 }}>
                 Description: {details && details[0] && details[0].description}
             </Box>
             <TableContainer component={Paper} sx={{ mt: 3 }}>
@@ -87,7 +87,7 @@ export default function ListDetails() {
             </TableContainer>
             <Reviews />
             {isLoggedIn &&
-                <AddReview />
+                <AddReview id={details && details[0] && details[0].list_id} />
             }
         </Container>
     )

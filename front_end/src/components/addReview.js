@@ -31,6 +31,7 @@ export default function AddReview(props) {
         }
         else {
             AuthService.addReview(id, rate, review);
+            window.location.reload();
         }
     };
 

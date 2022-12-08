@@ -21,13 +21,15 @@ export default function Reviews() {
 
     const handleHide = (name, id) => {
         AdminService.setReviewDisable(name, id);
+        window.location.reload();
     };
 
     const handleRecover = (name, id) => {
         AdminService.setReviewRecover(name, id);
+        window.location.reload();
     };
 
-    return reviews.map(review => (
+    return reviews.map(review => ((!review.hidden || isLoggedIn) ?
         <Container sx={{ mt: 2 }}>
             <Divider textAlign="left">{review.user_name}</Divider>
             <Box align='left' sx={{ mt: 1 }}>
@@ -44,7 +46,7 @@ export default function Reviews() {
                 <Box align='left' sx={{ mt: 1 }} >
                     <Button variant="contained" color="success"
                         size='small'
-                        onClick={()=>handleRecover(listName, review.id)}>
+                        onClick={() => handleRecover(listName, review.id)}>
                         Recover
                     </Button>
                 </Box>
@@ -52,12 +54,13 @@ export default function Reviews() {
                 <Box align='left' sx={{ mt: 1 }}>
                     <Button variant="contained" color="error"
                         size='small'
-                        onClick={()=>handleHide(listName, review.id)}>
+                        onClick={() => handleHide(listName, review.id)}>
                         Hide
                     </Button>
                 </Box>
                 : ''
             }
         </Container>
+        : ''
     ));
 };
