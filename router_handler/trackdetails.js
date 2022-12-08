@@ -233,7 +233,7 @@ exports.tenPublicList = (req, res) => {
         const empty_sql = `select user_name from play_list where user_name = '${name}'`
         database.query(empty_sql, (err, resulta) => {
         if(resulta.length===0){
-            res.send({ status: 401, message: 'error, please contact admin' })
+            return res.send({ status: 401, message: 'You don not have any play list, please create!' })
         }
 
 
@@ -242,9 +242,9 @@ exports.tenPublicList = (req, res) => {
 
         database.query(sql, (err, results) => {
             if (err) return res.send({ status: 401, message: err.message })
-            if (results.length===0){
-                res.send({ status: 401, message: 'You don not have any play list, please create!' })
-            }
+            // if (results.length===0){
+            //     res.send({ status: 401, message: 'You don not have any play list, please create!' })
+            // }
             res.send(results)
     
         })
