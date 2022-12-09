@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import validator from 'validator';
 import { useDispatch, useSelector } from "react-redux";
 import { login } from '../actions/auth';
+import AuthService from '../services/auth.service';
 
 function Copyright(props) {
   return (
@@ -72,6 +73,7 @@ export default function SignIn() {
         // window.location.reload();
       })
       .catch(err => {
+        AuthService.resendEmail();
         console.log(err);
       });
     // login(email, password)();
