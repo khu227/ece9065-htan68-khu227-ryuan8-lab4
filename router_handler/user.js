@@ -74,7 +74,7 @@ exports.verify = (req, res) => {
     const token = req.params.token
     jwt.verify(token, config.jwtSecretKey, (err, decoded) => {
         if (err) return res.send({ status: 401, message: 'The link is invalid' })
-        const sql = `update user set is_active=1 where Email=?`
+        const sql = `update user set email_verify=1 where Email=?`
         database.query(sql, decoded.id, (err, results) => {
             if (err) return console.log(err.message)
             res.send({ status: 200, message: 'Email verification success' })
@@ -100,13 +100,26 @@ exports.login = (req, res) => {
         const user = { ...results[0], password: ''}
         const tokenStr = jwt.sign(user, config.jwtSecretKey, { expiresIn: config.expiresIn })
         //check user is activated or not
-        if (results[0].is_active === 0) {
+        // if (results[0].is_active === 0) {
+        //     return res.send({ status: 401, message: 'Please contact the site administrator', token: 'Bearer ' + tokenStr, user })
+        // }else{
+        //     //return token and user infrmation
+        //     res.send({ status: 200, message: 'Login successfully', token: 'Bearer ' + tokenStr, user })
+        //     // res.send({ status: 100, message: 'Logged in successfully', token: 'Bearer ' + tokenStr })
+        // }
+        //check user is activated or not and email_verify or not
+        if (results[0].is_active === 0 && results[0].email_verify === 0) {
+            return res.send({ status: 401, message: 'Please contact the site administrator and verify your email', token: 'Bearer ' + tokenStr, user })
+        } else if (results[0].is_active === 0 && results[0].email_verify === 1) {
             return res.send({ status: 401, message: 'Please contact the site administrator', token: 'Bearer ' + tokenStr, user })
-        }else{
+        } else if (results[0].is_active === 1 && results[0].email_verify === 0) {
+            return res.send({ status: 401, message: 'Please verify your email', token: 'Bearer ' + tokenStr, user })
+        } else {
             //return token and user infrmation
             res.send({ status: 200, message: 'Login successfully', token: 'Bearer ' + tokenStr, user })
             // res.send({ status: 100, message: 'Logged in successfully', token: 'Bearer ' + tokenStr })
         }
+
 
     })
 }

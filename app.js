@@ -19,14 +19,6 @@ app.use(expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api\/ope
 
 
 
-const configa = {
-  authRequired: false,
-  auth0Logout: true,
-  secret: 'b972e0d1a850461887ec3fbb74784e9a555e5072c57772d1fe9e66e97b5d2d0e',
-  baseURL: 'http://localhost:3009',
-  clientID: '3PIU7knUIYtF9MQ9EzEEcJisAmYodHSb',
-  issuerBaseURL: 'https://dev-pqf225nhdpnt5aqf.us.auth0.com'
-};
 //express-openid-connect is a middleware that allows you to easily add authentication to your application. It uses the OpenID Connect protocol to authenticate users and get their profile information.
 app.get('/profile', requiresAuth(), (req, res) => {
   res.send(JSON.stringify(req.oidc.user));
@@ -69,5 +61,5 @@ const resendRouter = require('./router/resend');
 app.use('/api/secure', resendRouter);
 
 app.listen(3009, function () {
-  console.log('api server running at http://127.0.0.1:3009')
+  console.log('api server running at 3009')
 })
