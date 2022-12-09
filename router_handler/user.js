@@ -75,7 +75,7 @@ exports.verify = (req, res) => {
     jwt.verify(token, config.jwtSecretKey, (err, decoded) => {
         if (err) return res.send({ status: 401, message: 'The link is invalid' })
         const sql = `update user set email_verify=1 where Email=?`
-        database.query(sql, decoded.id, (err, results) => {
+        database.query(sql, decoded.Email, (err, results) => {
             if (err) return console.log(err.message)
             res.send({ status: 200, message: 'Email verification success' })
         } )
