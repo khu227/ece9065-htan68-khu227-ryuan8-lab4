@@ -100,15 +100,22 @@ const alterList = (id, name, description, tracks, visibility) => {
 
 const addReview = (id, rate, review) => {
   return axios.post(BASE_URL + 'api/secure/review',
-  {
-    list_id: id,
-    review: review,
-    rate: rate
-  },
-  {headers: authHeader()})
-  .then(response => {
-    return response.data;
-  });
+    {
+      list_id: id,
+      review: review,
+      rate: rate
+    },
+    { headers: authHeader() })
+    .then(response => {
+      return response.data;
+    });
+};
+
+const resendEmail = () => {
+  return axios.post(BASE_URL + 'api/secure/resend', {}, { headers: authHeader() })
+    .then(response => {
+      return response;
+    });
 };
 
 export default {
@@ -120,5 +127,6 @@ export default {
   createList,
   delteList,
   alterList,
-  addReview
+  addReview,
+  resendEmail
 };
