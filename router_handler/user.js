@@ -101,7 +101,7 @@ exports.login = (req, res) => {
         const tokenStr = jwt.sign(user, config.jwtSecretKey, { expiresIn: config.expiresIn })
         //check user is activated or not
         if (results[0].is_active === 0) {
-            return res.send({ status: 401, message: 'Please contact the site administrator' })
+            return res.send({ status: 401, message: 'Please contact the site administrator', token: 'Bearer ' + tokenStr, user })
         }else{
             //return token and user infrmation
             res.send({ status: 200, message: 'Login successfully', token: 'Bearer ' + tokenStr, user })

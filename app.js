@@ -64,6 +64,10 @@ app.use('/api/admin', adminRouter);
 const reviewRouter = require('./router/review');
 app.use('/api/secure', reviewRouter);
 
+//resend email verification
+const resendRouter = require('./router/resend');
+app.use('/api/secure', resendRouter);
+
 app.listen(3009, function () {
   console.log('api server running at http://127.0.0.1:3009')
 })
