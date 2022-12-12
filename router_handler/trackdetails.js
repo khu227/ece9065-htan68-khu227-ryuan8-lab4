@@ -414,7 +414,7 @@ exports.reviewInfoRecover = (req, res) => {
 //7abc Admin create ,update  and show policy
 exports.newpolicy = (req, res) => {
     const  policy_name = req.body.policy_name
-    const  policy_body = req.body.policy_body[0]
+    const  policy_body = req.body.policy_body
     const sql = `insert into Policy(policy_name,policy_body) values('${policy_name}','${policy_body}')`
     database.query(sql, (err, results) => {
         if (err) return res.send({ status: 401, message: err.message })
