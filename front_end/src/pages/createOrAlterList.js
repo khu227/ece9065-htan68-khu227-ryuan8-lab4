@@ -68,7 +68,6 @@ export default function CreateORALterList(props) {
   };
 
   return (
-    // <Container component="main" maxWidth="md">
       <Box align='right'>
         {isCreate ?
           <Button variant="contained" onClick={handleClick}>
@@ -152,6 +151,5 @@ export default function CreateORALterList(props) {
           </Box>
         </Popover>
       </Box>
-    // </Container >
   );
 };
