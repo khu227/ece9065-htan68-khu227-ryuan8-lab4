@@ -411,3 +411,38 @@ exports.reviewInfoRecover = (req, res) => {
     
 }
 
+//7abc Admin create ,update  and show policy
+exports.newpolicy = (req, res) => {
+    const  policy_name = req.body.policy_name
+    const  policy_body = req.body.policy_body[0]
+    const sql = `insert into Policy(policy_name,policy_body) values('${policy_name}','${policy_body}')`
+    database.query(sql, (err, results) => {
+        if (err) return res.send({ status: 401, message: err.message })
+    
+        res.send({status:200, message:'New policy have been created!'})
+    
+    })
+    }
+    
+    exports.modiPolicy = (req, res) => {
+        const  policy_name = req.body.policy_name
+        const  policy_body = req.body.policy_body
+        const sql = `update Policy set policy_body = '${policy_body}' where policy_name = '${policy_name}' `
+        database.query(sql, (err, results) => {
+            if (err) return res.send({ status: 401, message: err.message })
+    
+            res.send({status:200, message:'Policy have been updated! '})
+        
+        })
+        }
+    
+    exports.showPolicy = (req, res) => {
+        const  policy_name = req.body.policy_name
+        const sql = `select policy_body from Policy where policy_name = '${policy_name}' `
+        database.query(sql, (err, results) => {
+            if (err) return res.send({ status: 401, message: err.message })
+    
+            res.send({status:200, message: results})
+        
+        })
+        }

@@ -26,6 +26,13 @@ router.post('/api/secure/delExitList', trackdetails_handler.delExitList);
 router.post('/api/admin/reviewInfoDisable',trackdetails_handler.reviewInfoDisable)
 router.get('/api/admin/viewAllDisableReview',trackdetails_handler.viewAllDisableReview)
 router.post('/api/admin/reviewInfoRecover',trackdetails_handler.reviewInfoRecover)
+
+
+
+//7abc policy tools for admin
+router.post('/api/admin/newpolicy',trackdetails_handler.newpolicy)
+router.post('/api/admin/modiPolicy',trackdetails_handler.modiPolicy)
+router.post('/api/open/showPolicy', trackdetails_handler.showPolicy)
 module.exports = router;
 
 
