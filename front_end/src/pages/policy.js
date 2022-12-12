@@ -7,14 +7,18 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
+import AdminService from '../services/admin.service';
+import { useNavigate } from 'react-router';
 
 export default function Policy() {
 
     const [policyName, setPolicyName] = useState('security and privacy policy');
     const [text, setText] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = () => {
-
+        AdminService.updatePolicy(policyName, text);
+        navigate('/');
     };
 
     return (

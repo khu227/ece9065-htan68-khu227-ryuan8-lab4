@@ -159,6 +159,9 @@ export default function SignIn() {
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
+        <Link href="/policycontent" variant="body2">
+          {"Privacy | DMCA | AUP"}
+        </Link>
       </Container>
     </ThemeProvider>
   );
