@@ -20,6 +20,7 @@ import ListDetails from './pages/listDetails';
 import ManageLists from './pages/manageLists';
 import CreateORALterList from './pages/createOrAlterList';
 import Typography from '@mui/material/Typography';
+import Policy from './pages/policy';
 
 function App() {
   // const [loggedIn, setLoggedIn] = useState(false);
@@ -57,6 +58,7 @@ function App() {
         <Route path='/listdetails/:listname' element={<ListDetails />}></Route>
         <Route path='/managelists' element={<ManageLists />}></Route>
         <Route path='/createoralterlist' element={<CreateORALterList />}></Route>
+        <Route path='/policy' element={<Policy />}></Route>
       </Routes>
     </div>
   );

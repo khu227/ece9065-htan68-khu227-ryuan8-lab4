@@ -58,11 +58,23 @@ const setReviewRecover = (name, id) => {
     });
 };
 
+const updatePolicy = (name, policy) => {
+    return axios.post(API_URL + 'modiPolicy', {
+        policy_name: name,
+        policy_body: policy
+    }, {headers: authHeader()})
+    .then(response => {
+        console.log(response);
+        return response;
+    });
+};
+
 export default {
     getAllUsers,
     setUserAsAdmin,
     setUserActive,
     setUserDeactivate,
     setReviewDisable,
-    setReviewRecover
+    setReviewRecover,
+    updatePolicy
 }; 

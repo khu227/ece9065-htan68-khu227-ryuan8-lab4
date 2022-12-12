@@ -50,9 +50,19 @@ const getListReviews = name => {
         );
 };
 
+const getPolicy = name => {
+    return axios.post(API_URL + 'showPolicy', {
+        policy_name: name
+    })
+    .then(response => {
+        return response.data;
+    });
+};
+
 export default {
     searchTracks,
     getPublicLists,
     getPublicListsMore,
-    getListReviews
+    getListReviews,
+    getPolicy
 };

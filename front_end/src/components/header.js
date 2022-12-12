@@ -25,7 +25,8 @@ const route = {
     'Track Searching': '/search',
     'Public Play-lists': '/publiclists',
     'Administrator': '/admin',
-    'Manage Play-lists': '/managelists'
+    'Manage Play-lists': '/managelists',
+    'Policy': '/policy'
 }
 
 // reference: https://mui.com/material-ui/react-app-bar/
@@ -50,7 +51,7 @@ function Header(props) {
             : []
         ),
         ...(isAdmin ?
-            ['Administrator']
+            ['Administrator', 'Policy']
             : [])
     ];
 
