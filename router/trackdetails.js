@@ -29,7 +29,7 @@ router.post('/api/admin/reviewInfoRecover',trackdetails_handler.reviewInfoRecove
 //7abc policy tools for admin
 router.post('/api/admin/newpolicy',trackdetails_handler.newpolicy)
 router.post('/api/admin/modiPolicy',trackdetails_handler.modiPolicy)
-router.get('/api/open/showPolicy', trackdetails_handler.showPolicy)
+router.post('/api/open/showPolicy', trackdetails_handler.showPolicy)
 
 
 
