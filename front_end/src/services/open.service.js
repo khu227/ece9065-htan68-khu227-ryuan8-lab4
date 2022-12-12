@@ -55,7 +55,8 @@ const getPolicy = name => {
         policy_name: name
     })
     .then(response => {
-        return response.data;
+        console.log(response.data);
+        return response.data.message[0].policy_body;
     });
 };
 

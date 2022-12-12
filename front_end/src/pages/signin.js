@@ -158,10 +158,10 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
         <Link href="/policycontent" variant="body2">
           {"Privacy | DMCA | AUP"}
         </Link>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );
